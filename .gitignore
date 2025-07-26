@@ -1,0 +1,13 @@
+# Backend
+backend/node_modules/
+backend/db/*.sqlite
+
+# Frontend
+frontend/node_modules/
+dist/
+build/
+
+# General
+*.log
+.env
+.DS_Store
