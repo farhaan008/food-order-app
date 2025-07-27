@@ -3,7 +3,7 @@ import _axios, { type AxiosInstance, AxiosHeaders, type InternalAxiosRequestConf
 
 import { type Data } from './http.types'
 
-const baseUrl: string | undefined = import.meta.env.VITE_APP_API_URL
+const baseUrl: string | undefined = import.meta.env.VITE_API_URL
 
 // switch (process.env.VUE_APP_BUILD) {
 //   case 'production':

@@ -11,11 +11,13 @@ app.use(bodyParser.json());
 const orderRoutes = require('./routes/order');
 const paymentRoutes = require('./routes/payment');
 const menuRoutes = require('./routes/menu');
+const categoriesRoutes = require('./routes/menu');
 
 // Route Usage
 app.use('/order', orderRoutes);
 app.use('/payment-link', paymentRoutes);
 app.use('/menu', menuRoutes);
+app.use('/categories', categoriesRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;

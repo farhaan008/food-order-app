@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 const db = require('../db/database')
 
-router.get('/', (req, res) => {
+router.get('/', (_, res) => {
   const query = `
-    SELECT m.id AS item_id, m.name AS item_name, m.description, m.price, m.available, c.id AS category_id, c.name AS category_name
+    SELECT m.id AS item_id, m.name AS item_name, m.description, m.image_url, m.price, m.available, c.id AS category_id, c.name AS category_name
     FROM menu_items m
     LEFT JOIN categories c ON m.category_id = c.id
     ORDER BY c.name, m.name;`;
@@ -24,6 +24,9 @@ router.get('/', (req, res) => {
         name: row.item_name,
         description: row.description,
         price: row.price,
+        imageUrl: row.image_url,
+        categoryId: row.category_id,
+        categoryName: row.category_name,
         available: !!row.available
       });
     });

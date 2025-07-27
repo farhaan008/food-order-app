@@ -36,7 +36,7 @@ export default defineComponent({
 
     // Removed unused expression; value is accessed via showLoader computed property below
 
-    const showLoader = computed(() => store.isLoading)
+    const showLoader = computed(() => store.app.isLoading)
 
     const isMobile = (): boolean => {
       const rect = body.getBoundingClientRect()

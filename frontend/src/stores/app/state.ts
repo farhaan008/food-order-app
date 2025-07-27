@@ -1,10 +1,10 @@
 import type { Notify } from '@/types/elements/notify'
-export interface IAppState {
-  isLoading: boolean
-  toasts: Notify[]
-}
 
-export const state = (): IAppState => ({
-  isLoading: false,
-  toasts: [],
+export const state = () => ({
+  isLoading: false as boolean,
+  toasts: [] as Notify[],
+  menuItems: [] as any[],
+  cart: [] as any[],
 })
+
+export type State = ReturnType<typeof state>;

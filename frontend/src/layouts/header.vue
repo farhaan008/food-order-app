@@ -17,7 +17,7 @@
               class="flex items-center gap-2 px-4 py-2.5 text-black bg-gray-10 hover:bg-gray-50 focus:outline-none font-medium rounded-full border border-gray-300 cursor-pointer shadow-lg"
             >
               <span class="relative">
-                <span class="bg-red-700 text-white rounded-full size-5 flex items-center justify-center text-xs absolute -top-4 left-2">2</span>
+                <span class="bg-red-700 text-white rounded-full size-5 flex items-center justify-center text-xs absolute -top-4 left-2">{{ cartCount }}</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                   <path
                     stroke-linecap="round"
@@ -27,7 +27,7 @@
                 </svg>
               </span>
               <span class="flex flex-inline items-center gap-2">
-                &#8377; 360
+                &#8377; {{ cartTotal }}
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m15 11.25-3-3m0 0-3 3m3-3v7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
@@ -57,8 +57,9 @@
   <user-detail :show="show" @close="show = false"></user-detail>
 </template>
 <script lang="ts">
-import { defineComponent, ref, toRefs, watch, reactive } from 'vue'
+import { defineComponent, ref, toRefs, watch, reactive, computed } from 'vue'
 import UserDetail from '@/components/modal/user-detail.vue'
+import { store } from '@/stores'
 
 export default defineComponent({
   name: 'HeaderBar',
@@ -73,6 +74,8 @@ export default defineComponent({
     },
   },
   setup(_, { emit }) {
+    const cartCount = computed(() => store.app.cartCount);
+    const cartTotal = computed(() => store.app.cartTotal);
     const showLogout = ref(false)
     const Obj = reactive({
       show: false,
@@ -108,6 +111,8 @@ export default defineComponent({
       showLogout,
       toggleNavbar,
       showModal,
+      cartCount,
+      cartTotal
     }
   },
 })
