@@ -52,7 +52,7 @@
     </div>
   </header>
   <!-- <user-detail :show="show" @close="show = false"></user-detail> -->
-   <view-cart :show="show" @close="show = false"></view-cart>
+   <view-cart :show="show" @close="show = false" :width="'768px'"></view-cart>
 </template>
 <script lang="ts">
 import { defineComponent, ref, toRefs, watch, reactive, computed } from 'vue'

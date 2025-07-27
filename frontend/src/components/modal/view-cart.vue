@@ -51,9 +51,7 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.custom-width {
+/* .custom-width {
   width: 768px;
-}
+} */
 </style>
-<!-- <Modal-Example :show="show" @close="show=false"></Modal-Example>
-import ModalExample from './ModalExample.vue'; -->
