@@ -1,5 +1,5 @@
-import { useAppStore } from '@/stores/app';
+import { useAppStore } from '@/stores/app'
 
 export const store = {
   app: useAppStore(),
-};
+}

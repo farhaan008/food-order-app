@@ -31,28 +31,24 @@
               <p class="text-gray-600 font-normal">₹ 150</p>
             </div>
             <div>
-              <button
-              type="button"
-              class="flex items-center gap-2 px-2 py-1.5 text-black bg-gray-10 hover:bg-gray-50 focus:outline-none font-medium rounded-md border border-gray-300 cursor-pointer"
-            >
-              <span class="inline-block">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-              </span>
-              <span class="font-semibold">&nbsp; 1 &nbsp;</span>
-              <span class="inline-block">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-              </span>
-            </button>
+              <button type="button" class="flex items-center gap-2 px-2 py-1.5 text-black bg-gray-10 hover:bg-gray-50 focus:outline-none font-medium rounded-md border border-gray-300 cursor-pointer">
+                <span class="inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </span>
+                <span class="font-semibold">&nbsp; 1 &nbsp;</span>
+                <span class="inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </span>
+              </button>
             </div>
           </div>
-
         </div>
       </div>
-      <div class="w-full md:w-[35%] border border-gray-100 rounded-lg flex flex-col sm:relative sm:mb-0 sm:pb-0 justify-between" style="margin-bottom: 100px;">
+      <div class="w-full md:w-[35%] border border-gray-100 rounded-lg flex flex-col sm:relative sm:mb-0 sm:pb-0 justify-between" style="margin-bottom: 100px">
         <div class="p-4 border-b border-gray-100">
           <div class="border-b border-gray-200 pb-4">
             <h3 class="font-semibold">Bill Details</h3>
@@ -67,19 +63,20 @@
           </div>
         </div>
         <div class="fixed bottom-0 left-0 w-full sm:static sm:w-auto bg-white border-t border-gray-200 p-4">
-          <button @click="show = !show" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-3 px-4 rounded-full focus:outline-none cursor-pointer w-full uppercase">Make Payment</button>
+          <button @click="show = !show" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-3 px-4 rounded-full focus:outline-none cursor-pointer w-full uppercase">
+            Make Payment
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <payment-qr :show="show" @close="show = false" :showFooter="true" ></payment-qr>
+  <payment-qr :show="show" @close="show = false" :showFooter="true"></payment-qr>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue'
 import PaymentQr from '@/components/modal/payment-qr.vue'
 // import { store } from '@/stores'
-
 
 export default defineComponent({
   components: { PaymentQr },
@@ -94,7 +91,7 @@ export default defineComponent({
 
     return {
       ...toRefs(Obj),
-      makePayment
+      makePayment,
     }
   },
 })

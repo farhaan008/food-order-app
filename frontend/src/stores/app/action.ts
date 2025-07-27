@@ -1,8 +1,7 @@
 import type { Notify } from '@/types/elements/notify'
-import type { State } from './state';
+import type { State } from './state'
 
 export const actions = {
-
   setLoading(this: State, isLoading: boolean): void {
     this.isLoading = isLoading
   },
@@ -22,25 +21,25 @@ export const actions = {
     this.menuItems = items
   },
   addToCart(this: State, item: any): void {
-    const existing = this.cart?.find(f => f.id === item.id)
-      if (existing) {
-        existing.quantity++
-      } else {
-        this.cart?.push({ ...item, quantity: 1 })
-      }
+    const existing = this.cart?.find((f) => f.id === item.id)
+    if (existing) {
+      existing.quantity++
+    } else {
+      this.cart?.push({ ...item, quantity: 1 })
+    }
   },
   removeFromCart(this: State, id: any): void {
     if (!this.cart || this.cart.length === 0) return
-    const item = this.cart.find(f => f.id === id)
+    const item = this.cart.find((f) => f.id === id)
     if (item) {
       if (item.quantity > 1) {
         item.quantity--
       } else {
-        this.cart = this.cart.filter(f => f.id !== id)
+        this.cart = this.cart.filter((f) => f.id !== id)
       }
     }
   },
   clearCart(this: State): void {
-    this.cart = [];
-  }
+    this.cart = []
+  },
 }

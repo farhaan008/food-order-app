@@ -7,4 +7,4 @@ export const state = () => ({
   cart: [] as any[],
 })
 
-export type State = ReturnType<typeof state>;
+export type State = ReturnType<typeof state>

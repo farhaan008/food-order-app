@@ -40,7 +40,7 @@
               type="button"
               class="flex items-center gap-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-full text-sm px-4 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 cursor-pointer shadow-lg"
             >
-              View Cart
+              Checkout
             </button>
           </div>
         </div>
@@ -54,17 +54,20 @@
       </div>
     </div>
   </header>
-  <user-detail :show="show" @close="show = false"></user-detail>
+  <!-- <user-detail :show="show" @close="show = false"></user-detail> -->
+   <view-cart :show="show" @close="show = false"></view-cart>
 </template>
 <script lang="ts">
 import { defineComponent, ref, toRefs, watch, reactive, computed } from 'vue'
 import UserDetail from '@/components/modal/user-detail.vue'
+import ViewCart from '@/components/modal/view-cart.vue'
 import { store } from '@/stores'
 
 export default defineComponent({
   name: 'HeaderBar',
   components: {
     UserDetail,
+    ViewCart,
   },
   props: {
     navExpand: {
@@ -74,8 +77,8 @@ export default defineComponent({
     },
   },
   setup(_, { emit }) {
-    const cartCount = computed(() => store.app.cartCount);
-    const cartTotal = computed(() => store.app.cartTotal);
+    const cartCount = computed(() => store.app.cartCount)
+    const cartTotal = computed(() => store.app.cartTotal)
     const showLogout = ref(false)
     const Obj = reactive({
       show: false,
@@ -112,7 +115,7 @@ export default defineComponent({
       toggleNavbar,
       showModal,
       cartCount,
-      cartTotal
+      cartTotal,
     }
   },
 })

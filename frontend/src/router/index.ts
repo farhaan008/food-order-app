@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/success',
     name: 'success',
     component: () => import('@/views/Success.vue'),
-  }
+  },
 ]
 
 const router = createRouter({

@@ -1,8 +1,8 @@
 export const fosState = () => ({
   menuItems: [] as any[],
-});
+})
 
-export type State = ReturnType<typeof fosState>;
+export type State = ReturnType<typeof fosState>
 
 // export interface IAppState {
 //   menuItems?: any[]

@@ -5,7 +5,7 @@
         <div class="modal-header flex justify-between items-center p-4 border-b border-gray-200">
           <div>
             <!-- <h3 class="text-lg font-semibold">{{ title }}</h3> -->
-             <slot name="title"></slot>
+            <slot name="title"></slot>
           </div>
           <button @click="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
             <!-- <svg

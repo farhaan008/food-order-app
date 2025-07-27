@@ -12,7 +12,8 @@
         <p class="text-sm text-description mb-3">{{ item.description }}</p>
         <div class="flex items-center justify-center">
           <button
-            type="button" :class="!quantity? 'px-8': 'px-4'"
+            type="button"
+            :class="!quantity ? 'px-8' : 'px-4'"
             class="flex items-center gap-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-full text-md px-4 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 cursor-pointer"
           >
             <span v-if="quantity" @click="removeFromCart(item.id)" class="inline-block">
@@ -31,7 +32,6 @@
         </div>
       </div>
     </div>
-
   </div>
   <!-- <div v-for="(items, category) in menuItems" :key="category" class="w-full">
     <h3 class="text-lg text-black-700 font-semibold p-3">{{ category }}</h3>
@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, type PropType } from 'vue'
-import type { MenuItem }  from '@/types/menu/menu';
+import type { MenuItem } from '@/types/menu/menu'
 import { store } from '@/stores'
 
 export default defineComponent({
@@ -54,22 +54,21 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-
     const quantity = computed(() => store.app.getItemQuantity(props.item.id))
-    const menuItems = computed(() => store.app.getMenuItems);
+    const menuItems = computed(() => store.app.getMenuItems)
 
     const addToCart = (item: any) => {
-      store.app.addToCart(item);
+      store.app.addToCart(item)
     }
     const removeFromCart = (id: any) => {
-      store.app.removeFromCart(id);
+      store.app.removeFromCart(id)
     }
 
     return {
       menuItems,
       quantity,
       addToCart,
-      removeFromCart
+      removeFromCart,
     }
   },
 })

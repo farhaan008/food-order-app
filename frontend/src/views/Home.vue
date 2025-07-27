@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import MenuItem  from '@/components/menu/menu-item.vue'
+import MenuItem from '@/components/menu/menu-item.vue'
 import { COREAPI } from '@/services'
 import { store } from '@/stores'
 export default defineComponent({
@@ -50,36 +50,35 @@ export default defineComponent({
     MenuItem,
   },
   setup() {
-
     const quantity = computed(() => store.app.getItemQuantity())
-    const menuItems = computed(() => store.app.getMenuItems);
+    const menuItems = computed(() => store.app.getMenuItems)
     const getMenu = () => {
-      COREAPI.getMenu().then((response) => {
-        store.app.setMenuItems(response);
-        console.log('Response Data:', response)
-      })
-      .catch((error) => {
-        console.error('Error fetching menu:', error)
-      })
+      COREAPI.getMenu()
+        .then((response) => {
+          store.app.setMenuItems(response)
+          console.log('Response Data:', response)
+        })
+        .catch((error) => {
+          console.error('Error fetching menu:', error)
+        })
     }
     getMenu()
     const addToCart = (item: any) => {
-      store.app.addToCart(item);
+      store.app.addToCart(item)
     }
     const removeFromCart = (id: any) => {
-      store.app.removeFromCart(id);
+      store.app.removeFromCart(id)
     }
 
     return {
       menuItems,
       addToCart,
-      removeFromCart
+      removeFromCart,
     }
   },
 })
 </script>
-<style scoped>
-</style>
+<style scoped></style>
 
 <!-- const menuItems = computed(() => store.getters['app/getMenuItems'])
 const menuItems = computed(() => store.getters['app/getMenuItems'])
