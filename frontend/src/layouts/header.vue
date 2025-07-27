@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white py-1 border-b border-gray-300 header">
+  <header class="bg-white py-1 border-b border-gray-300">
     <div class="grid grid-cols-[40px_1fr] grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4 p-4">
       <div class="md:hidden col-start-1 row-start-1 flex items-center">
         <div @click="toggleNavbar" class="flex lg:hidden md:hidden sm:block">
@@ -35,20 +35,17 @@
             </button>
           </div>
           <div class="flex items-center justify-end">
-            <button
-              @click="showModal()"
-              type="button"
-              class="flex items-center gap-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-full text-sm px-4 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 cursor-pointer shadow-lg"
-            >
-              Checkout
-            </button>
+            <router-link to="/checkout" custom v-slot="{ navigate }">
+              <button
+                @click="navigate"
+                type="button" class="flex items-center gap-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-full text-sm px-4 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 cursor-pointer shadow-lg">
+                Checkout
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
 
-      <!-- Div 2:
-       - On small screens: spans both columns, second row
-       - On md and up: moves to first column (takes Div 1’s space) -->
       <div class="col-span-2 row-start-2 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center">
         <input type="text" placeholder="Search..." class="w-full lg:w-2/3 border border-gray-300 px-4 py-2 rounded-full focus:outline-none" />
       </div>
@@ -122,50 +119,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.header {
-  width: 100%;
-}
-.header .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.logout-menu {
-  position: absolute;
-  top: 45px;
-  right: 0;
-  padding: 5px 15px;
-  background-color: white;
-  border-radius: 5px;
-  z-index: 99;
-  width: 100px;
-}
-.arrow {
-  position: absolute;
-  right: 5px;
-  display: block;
-  width: 1rem;
-  height: 0.5rem;
-  margin: 0 0.3rem;
-  top: calc((0.5rm+1px) * -1);
-}
 
-.logout-menu .arrow::after,
-.logout-menu .arrow::before {
-  content: '';
-  position: absolute;
-  display: block;
-  border-color: transparent;
-  border-style: solid;
-}
-.logout-menu .arrow::after {
-  top: 1px;
-  border-width: 0.5rem 0.5rem 0 0.5rem;
-  border-bottom-color: #fff;
-}
-.logout-menu .arrow::before {
-  border-width: 0.5rem 0.5rem 0 0.5rem;
-  border-bottom-color: rgba(0, 0, 0, 0.25);
-  top: 0;
-}
 </style>

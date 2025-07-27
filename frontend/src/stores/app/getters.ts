@@ -8,6 +8,9 @@ export const getters = {
   getMenuItems: (state: State): any[] => {
     return state.menuItems || []
   },
+  getCartItems: (state: State): any[] => {
+    return state.cart || []
+  },
   cartTotal: (state: State) => (state.cart ?? []).reduce((total, item) => total + item.price * item.quantity, 0),
   cartCount: (state: State) => (state.cart ?? []).reduce((count, item) => count + item.quantity, 0),
   getItemQuantity: (state: State) => {
