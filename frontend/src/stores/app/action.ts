@@ -1,9 +1,10 @@
 import type { Notify } from '@/types/elements/notify'
 import type { State } from './state'
+import { COREAPI } from '@/services'
 
 export const actions = {
   setLoading(this: State, isLoading: boolean): void {
-    this.isLoading = isLoading
+    this.apiLoading = isLoading
   },
   showToast(this: State, toast: Notify): void {
     if (toast) {
@@ -14,6 +15,16 @@ export const actions = {
     if (this.toasts && index >= 0 && index < this.toasts.length) {
       this.toasts.splice(index ?? 0, 1)
     }
+  },
+
+  async fetchMenuItems(this: State): Promise<void> {
+    COREAPI.getMenu().then((response) => {
+      if(response.statusCode === 200 && response.data){
+        this.menuItems = response.data || []
+      }
+    }).catch((error) => {
+      console.error('Error fetching menu:', error)
+    })
   },
 
   setMenuItems(this: State, items: any[]): void {

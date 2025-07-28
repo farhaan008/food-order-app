@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
-    <div v-if="isVisible" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div :class="getClasses()" class="w-full mx-auto overflow-y-auto relative bg-white rounded-xl shadow-lg mx-3">
+    <div v-if="isVisible" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-3">
+      <div :class="getClasses()" class="w-full mx-auto overflow-y-auto relative bg-white rounded-xl shadow-lg">
         <div class="modal-header flex justify-between items-center p-4 border-b border-gray-200">
           <div>
             <slot name="title"></slot>
@@ -54,7 +54,7 @@ export default defineComponent({
     },
     modalClass: {
       type: String,
-      default: 'overflow-y-auto',
+      default: '',
     },
   },
   emits: ['close', 'confirm'],
@@ -67,8 +67,9 @@ export default defineComponent({
     }
 
     const getClasses = () => {
-      const baseClasses = props.width ? `max-w-[${props.width}]` : 'max-w-auto' // props.width ? `md: ${props.width}` : 'md:w-auto';
-      return `${baseClasses} ${props.modalClass}`
+      return `${props.modalClass}`;
+      // const baseClasses = props.width ? `max-w-[${props.width}]` : 'max-w-auto' // props.width ? `md: ${props.width}` : 'md:w-auto';
+      // return `${baseClasses} ${props.modalClass}`
       // return `modal-content ${baseClasses} ${props.modalClass}`;
       // return `modal-content ${props.width === 'sm' ? 'max-w-sm' : props.width === 'lg' ? 'max-w-lg' : props.width === 'xl' ? 'max-w-xl' : 'max-w-md'} ${props.modalClass}`;
     }

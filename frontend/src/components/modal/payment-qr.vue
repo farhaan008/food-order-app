@@ -1,11 +1,11 @@
 <template>
-  <Modal :isVisible="show" @cancel="close()" :width="'100'">
+  <Modal :isVisible="show" @cancel="close()">
     <template #title>
       <h3 class="text-lg font-semibold capitilize">Payment</h3>
     </template>
     <template #body>
-      <div class="custom-width">
-        <div class="mx-auto rounded-md">Show QR</div>
+      <div class="mx-auto rounded-md">
+        <img :src="qr" class="mx-auto" alt="UPI QR Code" />
       </div>
     </template>
     <template #footer>
@@ -27,6 +27,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    qr: {
+      type: String,
+      default: ''
+    }
   },
   setup(props, { emit }) {
     const close = () => {
@@ -44,9 +48,7 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.custom-width {
-  width: 480px;
-}
+
 </style>
 <!-- <Modal-Example :show="show" @close="show=false"></Modal-Example>
 import ModalExample from './ModalExample.vue'; -->

@@ -18,19 +18,12 @@ export default defineComponent({
     MenuItem,
   },
   setup() {
-    const quantity = computed(() => store.app.getItemQuantity())
     const menuItems = computed(() => store.app.getMenuItems)
-    const getMenu = () => {
-      COREAPI.getMenu()
-        .then((response) => {
-          store.app.setMenuItems(response)
-          console.log('Response Data:', response)
-        })
-        .catch((error) => {
-          console.error('Error fetching menu:', error)
-        })
+
+    if(Object.keys(menuItems.value).length === 0) {
+      store.app.fetchMenuItems();
     }
-    getMenu()
+
     const addToCart = (item: any) => {
       console.log('Adding to cart:', item)
       store.app.addToCart(item)

@@ -4,9 +4,7 @@
       <h3 class="text-lg font-semibold capitilize">My Cart</h3>
     </template>
     <template #body>
-      <div class="custom-width">
-        <cart-item></cart-item>
-      </div>
+      <cart-item></cart-item>
     </template>
     <template #footer>
       <div class="flex gap-4">
@@ -51,7 +49,4 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-/* .custom-width {
-  width: 768px;
-} */
 </style>

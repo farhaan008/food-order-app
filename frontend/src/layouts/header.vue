@@ -9,7 +9,7 @@
         </div>
       </div>
 
-      <div class="col-start-2 row-start-1 md:col-start-3 text-right">
+      <div v-if="cartItems.length" class="col-start-2 row-start-1 md:col-start-3 text-right">
         <div class="flex flex-inline items-center justify-end gap-4">
           <div class="flex items-center justify-end">
             <button
@@ -52,7 +52,7 @@
     </div>
   </header>
   <!-- <user-detail :show="show" @close="show = false"></user-detail> -->
-   <view-cart :show="show" @close="show = false" :width="'768px'"></view-cart>
+   <view-cart :show="show" @close="show = false" :modalClass="'max-w-2xl'"></view-cart>
 </template>
 <script lang="ts">
 import { defineComponent, ref, toRefs, watch, reactive, computed } from 'vue'
@@ -73,7 +73,9 @@ export default defineComponent({
       default: true,
     },
   },
+  emits: ['toggleNavbar'],
   setup(_, { emit }) {
+    const cartItems = computed(() => store.app.getCartItems)
     const cartCount = computed(() => store.app.cartCount)
     const cartTotal = computed(() => store.app.cartTotal)
     const showLogout = ref(false)
@@ -111,6 +113,7 @@ export default defineComponent({
       showLogout,
       toggleNavbar,
       showModal,
+      cartItems,
       cartCount,
       cartTotal,
     }

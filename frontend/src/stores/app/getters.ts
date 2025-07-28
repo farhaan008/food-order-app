@@ -2,7 +2,7 @@ import type { Notify } from '@/types/elements/notify'
 import type { State } from './state'
 
 export const getters = {
-  isLoading: (state: State): boolean => state.isLoading,
+  isLoading: (state: State): boolean => state.apiLoading,
   getToasts: (state: State): Notify[] => state.toasts,
 
   getMenuItems: (state: State): any[] => {

@@ -3,10 +3,13 @@ const router = express.Router();
 const db = require('../db/database');
 
 router.post('/', (req, res) => {
-  const { name, mobile, items } = req.body;
+  let { name, mobile, items } = req.body;
 
   if (!name || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Invalid order data' });
+  }
+  if (!name) {
+    name = 'Guest_' + Math.floor(1000 + Math.random() * 9000); // e.g., Guest_1234
   }
 
   db.run(`INSERT INTO users (name, mobile) VALUES (?, ?)`, [name, mobile], function (err) {

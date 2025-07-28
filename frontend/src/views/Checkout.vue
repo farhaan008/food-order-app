@@ -30,52 +30,24 @@
         </div>
       </div>
       <div class="w-full md:w-[35%] border border-gray-200 rounded-lg flex flex-col sm:relative sm:mb-0 sm:pb-0 justify-between" style="margin-bottom: 100px">
-        <div class="p-4 border-b border-gray-100">
-          <div class="border-b border-gray-200 pb-4">
-            <h3 class="font-semibold">Bill Details</h3>
-            <div class="flex justify-between items-center mt-2 text-gray-600 text-sm">
-              <span>Item Total</span>
-              <span>₹ 650</span>
-            </div>
-          </div>
-          <div class="flex justify-between items-center mt-2 text-gray-600 text-md font-semibold">
-            <span>To Pay</span>
-            <span>₹ 650</span>
-          </div>
-        </div>
-        <div class="fixed bottom-0 left-0 w-full sm:static sm:w-auto bg-white border-t border-gray-200 p-4">
-          <button @click="show = !show" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-3 px-4 rounded-full focus:outline-none cursor-pointer w-full uppercase">
-            Make Payment
-          </button>
-        </div>
+        <bill-detail></bill-detail>
       </div>
     </div>
   </div>
-  <payment-qr :show="show" @close="show = false" :showFooter="false"></payment-qr>
+
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue'
-import PaymentQr from '@/components/modal/payment-qr.vue'
 import CartItem from '@/components/cart/cart-item.vue'
-// import { store } from '@/stores'
+import BillDetail from '@/components/cart/bill-detail.vue'
 
 export default defineComponent({
-  components: { PaymentQr, CartItem },
+  components: { CartItem, BillDetail },
   name: 'Checkout',
   setup() {
-    const Obj = reactive({
-      show: false,
-    })
-    const makePayment = () => {
-      Obj.show = !Obj.show
-    }
 
-    return {
-      ...toRefs(Obj),
-      makePayment,
-    }
-  },
+  }
 })
 </script>
 

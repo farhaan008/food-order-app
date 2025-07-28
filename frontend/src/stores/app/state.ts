@@ -1,9 +1,9 @@
 import type { Notify } from '@/types/elements/notify'
 
 export const state = () => ({
-  isLoading: false as boolean,
+  apiLoading: false as boolean,
   toasts: [] as Notify[],
-  menuItems: [] as any[],
+  menuItems: {} as any,
   cart: [] as any[],
 })
 
