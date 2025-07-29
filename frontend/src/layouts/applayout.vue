@@ -5,7 +5,7 @@
     </div>
     <div v-if="navExpand" @click="onClickOutside" class="fixed inset-0 bg-black opacity-5 h-full w-full z-20 lg:hidden md:hidden sm:block"></div>
     <aside :class="navExpand ? 'open-sidebar' : ''" class="sidebar p-3 border-r border-gray-200 z-50 bg-white">
-      <SideBar :navExpand="navExpand" @toggleNavbar="navExpand = !navExpand"></SideBar>
+      <SideBar :navExpand="navExpand"></SideBar>
     </aside>
     <main class="main grid grid-rows-[auto, 1fr] h-screen">
       <HeaderBar @toggleNavbar="navExpand = !navExpand"></HeaderBar>
@@ -69,6 +69,7 @@ export default defineComponent({
       }
       // if (sidebar.value && !sidebar.value.contains(event.target as Node)) {}
     }
+
 
     return {
       navExpand,

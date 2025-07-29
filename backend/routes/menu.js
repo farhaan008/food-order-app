@@ -30,7 +30,11 @@ router.get('/', (_, res) => {
         available: !!row.available
       });
     });
-    res.json({ status: 'success', data: menu, statusCode: 200 });
+    const sortedMenu = {};
+    Object.keys(menu).sort((a, b) => a.localeCompare(b)).forEach(category => {
+        sortedMenu[category] = menu[category];
+    });
+    res.json({ status: 'success', data: sortedMenu, statusCode: 200 });
   });
   // db.all(`SELECT * FROM menu_items`, [], (err, rows) => {
   //   if (err) return res.status(500).json({ error: 'Menu fetch error' })

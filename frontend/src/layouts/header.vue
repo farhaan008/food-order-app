@@ -47,7 +47,7 @@
       </div>
 
       <div class="col-span-2 row-start-2 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center">
-        <input type="text" placeholder="Search..." class="w-full lg:w-2/3 border border-gray-300 px-4 py-2 rounded-full focus:outline-none" />
+        <input @input="onSearch($event)" type="text" placeholder="Search" class="w-full lg:w-2/3 border border-gray-300 px-4 py-2 rounded-full focus:outline-none" />
       </div>
     </div>
   </header>
@@ -75,13 +75,16 @@ export default defineComponent({
   },
   emits: ['toggleNavbar'],
   setup(_, { emit }) {
-    const cartItems = computed(() => store.app.getCartItems)
-    const cartCount = computed(() => store.app.cartCount)
-    const cartTotal = computed(() => store.app.cartTotal)
+
+    const debounceTimer = ref<number | null>(null)
     const showLogout = ref(false)
     const Obj = reactive({
       show: false,
     })
+
+    const cartItems = computed(() => store.app.getCartItems)
+    const cartCount = computed(() => store.app.cartCount)
+    const cartTotal = computed(() => store.app.cartTotal)
 
     const showModal = () => {
       Obj.show = true
@@ -108,6 +111,17 @@ export default defineComponent({
       emit('toggleNavbar')
     }
 
+    const onSearch = (e:Event) => {
+      if(debounceTimer.value){
+        clearTimeout(debounceTimer.value)
+      }
+      debounceTimer.value = setTimeout(() => {
+        const target = e?.target as HTMLInputElement;
+        const val = target.value;
+        store.app.setSearchVal(val);
+      }, 800);
+    }
+
     return {
       ...toRefs(Obj),
       showLogout,
@@ -116,6 +130,7 @@ export default defineComponent({
       cartItems,
       cartCount,
       cartTotal,
+      onSearch
     }
   },
 })

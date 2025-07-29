@@ -53,4 +53,16 @@ export const actions = {
   clearCart(this: State): void {
     this.cart = []
   },
+
+  setSearchVal(this:State, searchVal:string): void {
+    this.searchVal = searchVal;
+  },
+
+  triggerScroll(this:State, categoryId:string|number) {
+    this.scrollTargetCategory = categoryId
+  },
+  clearScrollTarget(this:State) {
+    this.scrollTargetCategory = null;
+  }
+
 }

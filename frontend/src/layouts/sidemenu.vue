@@ -1,8 +1,8 @@
 <template>
   <nav>
-    <ul class="list-none flex flex-col gap-y-0">
-      <li v-for="(_, category) in menuItems" class="flex flex-col gap-x-2">
-        <a class="flex justify-start px-3 items-center py-2 text-gray-600 cursor-pointer hover:bg-gray-100 rounded-md">
+    <ul class="list-none flex flex-col gap-y-2">
+      <li v-for="(_, category) in menuItems" @click="categoryClick(category)" class="flex flex-col gap-x-2">
+        <a class="flex justify-start px-3 py-1 items-center text-gray-800 cursor-pointer">
           <span class="text-sm">{{ category }}</span>
         </a>
       </li>
@@ -19,12 +19,20 @@ export default defineComponent({
   setup() {
     const menuItems = computed(() => store.app.getMenuItems)
 
+    const categoryClick = (category:string|number|null) => {
+      store.app.triggerScroll(category);
+    }
+
     return {
-      menuItems
+      menuItems,
+      categoryClick
     }
   },
 })
 </script>
+<style scoped>
+  .active { border-left: 3px solid #000; }
+</style>
 
 <!-- <ul class="list-none flex flex-col gap-y-1 overflow-hidden transition-all duration-300 ease-in-out max-h-0">
   <li class="flex flex-col gap-x-2">

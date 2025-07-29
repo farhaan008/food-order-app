@@ -20,7 +20,6 @@ export default defineComponent({
     SideMenu,
   },
 
-  emits: ['toggleNavbar'],
   setup(_, { emit }) {
     return {}
   },

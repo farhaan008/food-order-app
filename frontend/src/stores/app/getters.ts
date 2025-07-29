@@ -19,4 +19,5 @@ export const getters = {
       return item ? item.quantity : 0
     }
   },
+  getSearchVal: (state: State) => state.searchVal,
 }
