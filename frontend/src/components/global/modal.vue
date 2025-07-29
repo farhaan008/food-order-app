@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div v-if="isVisible" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-3">
-      <div :class="getClasses()" class="w-full mx-auto overflow-y-auto relative bg-white rounded-xl shadow-lg">
+      <div :class="getClasses()" class="w-full mx-auto overflow-y-auto relative -top-[10%] bg-white rounded-xl shadow-lg">
         <div class="modal-header flex justify-between items-center p-4 border-b border-gray-200">
           <div>
             <slot name="title"></slot>
