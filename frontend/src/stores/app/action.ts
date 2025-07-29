@@ -1,7 +1,7 @@
 import type { Notify } from '@/types/elements/notify'
 import type { State } from './state'
 import { COREAPI } from '@/services'
-import type { User } from '@/types/fos'
+import type { Menu, MenuItem, User } from '@/types/fos'
 
 export const actions = {
   setLoading(this: State, isLoading: boolean): void {
@@ -28,19 +28,20 @@ export const actions = {
     })
   },
 
-  setMenuItems(this: State, items: any[]): void {
+  setMenuItems(this: State, items: Menu): void {
     console.log('Setting menu items:', items)
     this.menuItems = items
   },
-  addToCart(this: State, item: any): void {
+  addToCart(this: State, item: MenuItem): void {
     const existing = this.cart?.find((f) => f.id === item.id)
     if (existing) {
       existing.quantity++
     } else {
       this.cart?.push({ ...item, quantity: 1 })
     }
+    localStorage.setItem('cart', JSON.stringify(this.cart))
   },
-  removeFromCart(this: State, id: any): void {
+  removeFromCart(this: State, id: string|number): void {
     if (!this.cart || this.cart.length === 0) return
     const item = this.cart.find((f) => f.id === id)
     if (item) {
@@ -52,7 +53,9 @@ export const actions = {
     }
   },
   clearCart(this: State): void {
-    this.cart = []
+    this.cart = [],
+    localStorage.removeItem('user')
+    localStorage.removeItem('cart')
   },
 
   setSearchVal(this:State, searchVal:string): void {
@@ -68,6 +71,7 @@ export const actions = {
 
   setUser(this:State, user:User) {
     this.user = user;
+    localStorage.setItem('user', JSON.stringify(user))
   }
 
 }

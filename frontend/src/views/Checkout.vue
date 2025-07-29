@@ -34,19 +34,34 @@
       </div>
     </div>
   </div>
-
+  <user-detail :show="show" @close="show = false" :modalClass="'max-w-md'" :showCloseButton="false"></user-detail>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, reactive, toRefs, onMounted } from 'vue'
 import CartItem from '@/components/cart/cart-item.vue'
 import BillDetail from '@/components/cart/bill-detail.vue'
+import UserDetail from '@/components/modal/user-detail.vue'
+import { store } from '@/stores'
 
 export default defineComponent({
-  components: { CartItem, BillDetail },
+  components: { CartItem, BillDetail, UserDetail },
   name: 'Checkout',
   setup() {
+    const Obj = reactive({
+      show: false,
+    })
 
+    onMounted(()=>{
+      const user = store.app.user;
+      if(!user.name){
+        Obj.show = true;
+      }
+    })
+
+    return{
+      ...toRefs(Obj)
+    }
   }
 })
 </script>

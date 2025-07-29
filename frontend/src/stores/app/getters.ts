@@ -1,14 +1,14 @@
 import type { Notify } from '@/types/elements/notify'
 import type { State } from './state'
-
+import type { Menu, CartItem, User } from '@/types/fos'
 export const getters = {
   isLoading: (state: State): boolean => state.apiLoading,
   getToasts: (state: State): Notify[] => state.toasts,
 
-  getMenuItems: (state: State): any[] => {
-    return state.menuItems || []
+  getMenuItems: (state: State): Menu => {
+    return state.menuItems || {}
   },
-  getCartItems: (state: State): any[] => {
+  getCartItems: (state: State): CartItem[] => {
     return state.cart || []
   },
   cartTotal: (state: State) => (state.cart ?? []).reduce((total, item) => total + item.price * item.quantity, 0),
@@ -20,6 +20,6 @@ export const getters = {
     }
   },
   getSearchVal: (state: State) => state.searchVal,
-  getUser: (state: State) => state.user
+  getUser: (state: State): User => state.user
 
 }

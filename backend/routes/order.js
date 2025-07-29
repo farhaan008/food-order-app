@@ -3,9 +3,7 @@ const router = express.Router();
 const db = require('../db/database');
 
 router.post('/', (req, res) => {
-  console.log(req.body);
   let { name, mobile, items } = req.body;
-
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Invalid order data' });
   }

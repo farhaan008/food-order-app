@@ -13,6 +13,10 @@ export interface Menu {
   [key: string]: MenuItem[]
 }
 
+export interface CartItem extends MenuItem {
+  quantity: number
+}
+
 export interface User {
   name: string | null,
   mobile?: string | number | null

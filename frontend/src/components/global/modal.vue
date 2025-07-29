@@ -6,7 +6,7 @@
           <div>
             <slot name="title"></slot>
           </div>
-          <button @click="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <button v-if="showCloseButton" @click="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
             <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
@@ -15,7 +15,7 @@
         <div class="modal-body p-4">
           <slot name="body"></slot>
         </div>
-        <div v-if="showFooter" class="modal-footer p-4 border-t border-gray-200 flex flex-wrap gap-2 justify-end">
+        <div v-if="showFooter" class="modal-footer p-4 border-t border-gray-200 flex flex-wrap gap-2 justify-center">
           <slot name="footer">
             <button @click="confirmAction" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-2 px-4 rounded-md focus:outline-none">Confirm</button>
             <button @click="closeModal" class="bg-gray-10 hover:bg-gray-100 text-black text-sm font-medium py-2 px-4 rounded-sm border border-gray-400 focus:outline-none">Close</button>
