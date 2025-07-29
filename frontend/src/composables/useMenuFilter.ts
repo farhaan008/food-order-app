@@ -1,5 +1,5 @@
-import type { Menu } from '@/types/menu/menu'
-import type { MenuItem } from '@/types/menu/menu'
+import type { Menu } from '@/types/fos'
+import type { MenuItem } from '@/types/fos'
 
 export function filterMenuBySearch(menuItems: Menu, searchTerm: string): Menu {
   const term = searchTerm.trim().toLowerCase()

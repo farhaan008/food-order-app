@@ -11,7 +11,12 @@
       <div class="w-full">
         <p class="text-sm text-description mb-3">{{ item.description }}</p>
         <div class="flex items-center justify-center">
-          <button
+          <button v-if="!quantity" @click="addToCart(item)" type="button"
+            :class="!quantity ? 'px-8' : 'px-4'"
+            class="flex items-center gap-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-full text-md px-4 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 cursor-pointer">
+            Add
+          </button>
+          <button v-else
             type="button"
             :class="!quantity ? 'px-8' : 'px-4'"
             class="flex items-center gap-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-full text-md px-4 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 cursor-pointer"
@@ -21,8 +26,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
             </span>
-            <span v-if="!quantity" @click="addToCart(item)">Add</span>
-            <span v-else>{{ quantity }}</span>
+            <span>{{ quantity }}</span>
             <span v-if="quantity" @click="addToCart(item)" class="inline-block">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -33,16 +37,11 @@
       </div>
     </div>
   </div>
-  <!-- <div v-for="(items, category) in menuItems" :key="category" class="w-full">
-    <h3 class="text-lg text-black-700 font-semibold p-3">{{ category }}</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    </div>
-  </div> -->
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, type PropType } from 'vue'
-import type { MenuItem } from '@/types/menu/menu'
+import type { MenuItem } from '@/types/fos'
 import { store } from '@/stores'
 
 export default defineComponent({

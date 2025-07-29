@@ -20,4 +20,6 @@ export const getters = {
     }
   },
   getSearchVal: (state: State) => state.searchVal,
+  getUser: (state: State) => state.user
+
 }

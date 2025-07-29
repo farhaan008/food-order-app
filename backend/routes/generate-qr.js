@@ -3,7 +3,7 @@ const router = express.Router();
 const QRCode = require('qrcode');
 
 router.post('/', async (req, res) => {
-  const { amount } = req.body.params;
+  const { amount } = req.body;
   const upiId = 'farhaaniit80@oksbi';
   const name = 'Mohammad Farhan';
   if ( !amount) {

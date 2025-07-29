@@ -94,22 +94,22 @@ export class Axios {
       let response: AxiosResponse
       switch (type) {
         case 'get':
-          response = await this.instance.get(url, { params: data })
+          response = await this.instance.get(url, data)
           break
         case 'post':
-          response = await this.instance.post(url, { params: data })
+          response = await this.instance.post(url, data)
           break
         case 'put':
-          response = await this.instance.put(url, { params: data })
+          response = await this.instance.put(url, data)
           break
         case 'patch':
-          response = await this.instance.get(url, { params: data })
+          response = await this.instance.get(url, data)
           break
         case 'delete':
-          response = await this.instance.get(url, { params: data })
+          response = await this.instance.get(url, data)
           break
         default:
-          response = await this.instance.get(url, { params: data })
+          response = await this.instance.get(url, data)
           break
       }
       return response && response.data ? response.data : response

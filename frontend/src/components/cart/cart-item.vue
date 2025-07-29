@@ -23,7 +23,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, type PropType } from 'vue'
-import type { MenuItem } from '@/types/menu/menu'
+import type { MenuItem } from '@/types/fos'
 import { store } from '@/stores'
 
 export default defineComponent({

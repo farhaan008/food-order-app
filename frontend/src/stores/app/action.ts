@@ -1,6 +1,7 @@
 import type { Notify } from '@/types/elements/notify'
 import type { State } from './state'
 import { COREAPI } from '@/services'
+import type { User } from '@/types/fos'
 
 export const actions = {
   setLoading(this: State, isLoading: boolean): void {
@@ -17,8 +18,8 @@ export const actions = {
     }
   },
 
-  async fetchMenuItems(this: State): Promise<void> {
-    COREAPI.getMenu().then((response) => {
+  async fetchMenuItems(this: State): Promise<any> {
+    await COREAPI.getMenu().then((response) => {
       if(response.statusCode === 200 && response.data){
         this.menuItems = response.data || []
       }
@@ -63,6 +64,10 @@ export const actions = {
   },
   clearScrollTarget(this:State) {
     this.scrollTargetCategory = null;
+  },
+
+  setUser(this:State, user:User) {
+    this.user = user;
   }
 
 }

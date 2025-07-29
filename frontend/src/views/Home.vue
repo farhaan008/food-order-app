@@ -10,7 +10,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, watch } from 'vue'
 import type { ComponentPublicInstance } from 'vue'
-// import type { Menu } from '@/types/menu/menu'
 import MenuItem from '@/components/menu/menu-item.vue'
 import { filterMenuBySearch } from '@/composables/useMenuFilter.ts'
 import { store } from '@/stores'

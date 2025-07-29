@@ -12,3 +12,8 @@ export interface MenuItem {
 export interface Menu {
   [key: string]: MenuItem[]
 }
+
+export interface User {
+  name: string | null,
+  mobile?: string | number | null
+}

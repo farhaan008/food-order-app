@@ -12,17 +12,20 @@
       <span>₹ {{cartTotal}}</span>
     </div>
   </div>
-  <div class="fixed bottom-0 left-0 w-full sm:static sm:w-auto bg-white border-t border-gray-200 p-4">
-    <button @click="makePayment()" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-3 px-4 rounded-full focus:outline-none cursor-pointer w-full uppercase">
-      Make Payment
+  <div v-if="cartTotal" class="fixed bottom-0 left-0 w-full sm:static sm:w-auto bg-white border-t border-gray-200 p-4 space-y-2">
+    <button @click="createOrder()" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-3 px-4 rounded-full focus:outline-none cursor-pointer w-full uppercase">
+      Create Order
     </button>
+    <!-- <button @click="makePayment()" class="bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium py-3 px-4 rounded-full focus:outline-none cursor-pointer w-full uppercase">
+      Make Payment
+    </button> -->
   </div>
   <payment-qr :qr="qr" :show="show" @close="show = false" :showFooter="false" :modalClass="'max-w-md'"></payment-qr>
 </template>
 <script lang="ts">
 import { defineComponent, type PropType, toRefs, reactive, computed } from 'vue'
 import PaymentQr from '@/components/modal/payment-qr.vue'
-import type { MenuItem } from '@/types/menu/menu'
+import type { MenuItem } from '@/types/fos'
 import { store } from '@/stores'
 import { COREAPI } from '@/services'
 
@@ -58,12 +61,27 @@ export default defineComponent({
 
     const makePayment = () => {
       getPaymentQr();
-
     }
+
+    const createOrder = () => {
+      if(cartTotal.value){
+        const items = store.app.cart;
+        let params = { items }
+        COREAPI.createOrder(params).then((response) => {
+          console.log(response);
+        }).catch((error) => {
+          console.error('Error fetching menu:', error)
+        })
+      }else{
+        console.log('Cart is empty...');
+      }
+    }
+
     return {
       ...toRefs(Obj),
       makePayment,
-      cartTotal
+      cartTotal,
+      createOrder
     }
   }
 
