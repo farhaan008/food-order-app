@@ -2,8 +2,8 @@
   <div class="flex flex-col gap-y-6">
     <transition name="slide">
       <div class="flex flex-col items-center cursor-pointer">
-        <img src="@/assets/BS_logo.png" alt="Logo" width="80" />
-        <h1 class="text-xl font-bold text-gray-800 dark:text-white">Burger Singh</h1>
+        <!-- <img src="@/assets/BS_logo.png" alt="Logo" width="80" /> -->
+        <h1 class="text-xl font-bold text-gray-800 dark:text-white">RR Cafe</h1>
         <!-- <img class="h-4 w-4" :class="{ 'transform rotate-180 relative': navExpand }" src="@/assets/icons/arrow-down.svg" alt="Toggle Navbar" /> -->
       </div>
     </transition>

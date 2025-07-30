@@ -17,11 +17,11 @@
   <div class="w-full lg:w-[80%] px-4 lg:px-0 mx-auto">
     <div class="flex flex-col gap-6 mt-4 md:flex-row min-h-[calc(100vh-100px)]">
       <div class="w-full md:w-[65%] border border-gray-200 rounded-lg">
-        <div class="p-4 border-b border-gray-100">
+        <div v-if="user.name" class="p-4 border-b border-gray-100">
           <h3 class="font-semibold">Customer</h3>
           <div class="flex justify-between items-center mt-2 text-gray-600 text-sm">
-            <span>Mohammad Farhan</span>
-            <span>9650705593</span>
+            <span>{{ user.name }}</span>
+            <span>{{ user.mobile }}</span>
           </div>
         </div>
         <div class="p-4">
@@ -39,6 +39,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, onMounted } from 'vue'
+import type { User } from '@/types/fos'
 import CartItem from '@/components/cart/cart-item.vue'
 import BillDetail from '@/components/cart/bill-detail.vue'
 import UserDetail from '@/components/modal/user-detail.vue'
@@ -50,11 +51,12 @@ export default defineComponent({
   setup() {
     const Obj = reactive({
       show: false,
+      user: {} as User
     })
 
     onMounted(()=>{
-      const user = store.app.user;
-      if(!user.name){
+      Obj.user = store.app.user;
+      if(!Obj.user.name){
         Obj.show = true;
       }
     })

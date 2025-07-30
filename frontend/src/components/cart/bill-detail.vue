@@ -24,6 +24,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, type PropType, toRefs, reactive, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import PaymentQr from '@/components/modal/payment-qr.vue'
 import type { MenuItem } from '@/types/fos'
 import { store } from '@/stores'
@@ -38,7 +39,8 @@ export default defineComponent({
       required: false,
     },
   },
-  setup(props, { emit }) {
+  setup(_, { emit }) {
+    const router = useRouter()
     const cartTotal = computed(() => store.app.cartTotal)
     const Obj = reactive({
       show: false,
@@ -65,10 +67,13 @@ export default defineComponent({
 
     const createOrder = () => {
       if(cartTotal.value){
+        const { name, mobile } = store.app.user;
         const items = store.app.cart;
-        let params = { items }
+        let params = { name, mobile, items }
         COREAPI.createOrder(params).then((response) => {
           console.log(response);
+          router.push('/');
+          store.app.clearCart();
         }).catch((error) => {
           console.error('Error fetching menu:', error)
         })
