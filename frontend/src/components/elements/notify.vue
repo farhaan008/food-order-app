@@ -40,7 +40,7 @@ export default defineComponent({
       if (toasts.value.length > 0) {
         setTimeout(() => {
           store.app.clearToast(0);
-        }, 5000000)
+        }, 5000)
       }
     },{ deep: true })
 

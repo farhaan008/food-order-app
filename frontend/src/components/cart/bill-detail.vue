@@ -47,7 +47,7 @@ export default defineComponent({
       show: false,
       qr: '' as string
     })
-    showToast('Your order has been created!', true )
+    // showToast('Your order has been created!', true )
 
     const getPaymentQr = () => {
       if(cartTotal.value){
