@@ -4,18 +4,18 @@ const db = require('../db/database');
 
 router.post('/', (req, res) => {
   let { name, mobile, items } = req.body;
+  // console.log(req.body);
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Invalid order data' });
   }
   if (!name) {
     name = 'Guest_' + Math.floor(1000 + Math.random() * 9000);
   }
-  console.log(name, mobile);
   db.run(`INSERT INTO users (name, mobile) VALUES (?, ?)`, [name, mobile], function (err) {
     if (err) return res.status(500).json({ error: err });
 
     const userId = this.lastID;
-    db.run(`INSERT INTO orders (user_id, status) VALUES (?)`, [userId], function (err) {
+    db.run(`INSERT INTO orders (user_id) VALUES (?)`, [userId], function (err) {
       if (err) return res.status(500).json({ error: 'Order insert error' });
 
       const orderId = this.lastID;

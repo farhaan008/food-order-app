@@ -13,6 +13,7 @@ import type { ComponentPublicInstance } from 'vue'
 import MenuItem from '@/components/menu/menu-item.vue'
 import { filterMenuBySearch } from '@/composables/useMenuFilter.ts'
 import { store } from '@/stores'
+import { showToast } from '@/utils/common/common-functions'
 export default defineComponent({
   name: 'Home',
   components: {
@@ -26,6 +27,7 @@ export default defineComponent({
     )
 
     onMounted(() => {
+      // showToast('Your order has been created!', true )
       if(Object.keys(menuItems.value).length === 0) {
         store.app.fetchMenuItems();
       }

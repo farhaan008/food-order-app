@@ -29,6 +29,7 @@ import PaymentQr from '@/components/modal/payment-qr.vue'
 import type { MenuItem } from '@/types/fos'
 import { store } from '@/stores'
 import { COREAPI } from '@/services'
+import { showToast } from '@/utils/common/common-functions'
 
 export default defineComponent({
   name: 'BillDetail',
@@ -46,6 +47,7 @@ export default defineComponent({
       show: false,
       qr: '' as string
     })
+    showToast('Your order has been created!', true )
 
     const getPaymentQr = () => {
       if(cartTotal.value){
@@ -76,6 +78,7 @@ export default defineComponent({
           store.app.clearCart();
         }).catch((error) => {
           console.error('Error fetching menu:', error)
+          store.app.showToast({ message: error, type: 'success', duration: 30000 })
         })
       }else{
         console.log('Cart is empty...');

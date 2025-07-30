@@ -64,7 +64,7 @@ export default defineComponent({
       Obj.offset = offset
     }
 
-    store.showToast({
+    store.app.showToast({
       message: 'Welcome to the Dashboard!',
       type: 'success',
       duration: 3000,

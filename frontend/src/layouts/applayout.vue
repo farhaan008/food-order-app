@@ -11,6 +11,7 @@
       <HeaderBar @toggleNavbar="navExpand = !navExpand"></HeaderBar>
       <div class="flex flex-col p-3 overflow-y-auto">
         <Dashboard />
+        <NotifyVue></NotifyVue>
       </div>
     </main>
   </div>
@@ -22,10 +23,11 @@ import { store } from '@/stores'
 import SideBar from './sidebar.vue'
 import HeaderBar from './header.vue'
 import Dashboard from './dashboard.vue'
+import NotifyVue from  '@/components/elements/notify.vue'
 
 export default defineComponent({
   name: 'LayoutContainer',
-  components: { SideBar, HeaderBar, Dashboard },
+  components: { SideBar, HeaderBar, Dashboard, NotifyVue },
 
   setup() {
     const width = 768
