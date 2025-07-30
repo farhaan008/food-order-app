@@ -3,11 +3,27 @@ const router = express.Router()
 const db = require('../db/database')
 
 router.get('/', (_, res) => {
-  const query = `
-    SELECT m.id AS item_id, m.name AS item_name, m.description, m.image_url, m.price, m.available, c.id AS category_id, c.name AS category_name
-    FROM menu_items m
-    LEFT JOIN categories c ON m.category_id = c.id
-    ORDER BY c.name, m.name;`;
+  // const query = `
+  //   SELECT m.id AS item_id, m.name AS item_name, m.description, m.image_url, m.price, m.available, c.id AS category_id, c.name AS category_name
+  //   FROM menu_items m
+  //   LEFT JOIN categories c ON m.category_id = c.id
+  //   ORDER BY c.name, m.name;`;
+  
+  const query = `SELECT
+    m.id AS item_id,
+    m.name AS item_name,
+    m.description,
+    m.image_url,
+    m.available,
+    c.id AS category_id,
+    c.name AS category_name,
+    sz.id AS size_id,
+    sz.size,
+    COALESCE(sz.price, m.price) AS price
+  FROM menu_items m
+  LEFT JOIN categories c ON m.category_id = c.id
+  LEFT JOIN item_sizes sz ON sz.menu_item_id = m.id
+  ORDER BY c.name, m.name, sz.size;`
     
   db.all(query, [], (err, rows) => {
     if (err) {
@@ -23,11 +39,14 @@ router.get('/', (_, res) => {
         id: row.item_id,
         name: row.item_name,
         description: row.description,
-        price: row.price,
         imageUrl: row.image_url,
+        available: !!row.available,
         categoryId: row.category_id,
         categoryName: row.category_name,
-        available: !!row.available
+        sizeId: row.size_id,
+        size: row.size,
+        price: row.price,
+        // sizePrice: row.size_price
       });
     });
     const sortedMenu = {};

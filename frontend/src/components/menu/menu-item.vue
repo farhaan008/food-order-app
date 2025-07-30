@@ -78,3 +78,66 @@ export default defineComponent({
   color: #696f76;
 }
 </style>
+
+
+
+
+<!-- <template>
+  <div class="p-6">
+    <div v-for="(items, category) in groupedProducts" :key="category" class="mb-10">
+      <h2 class="text-2xl font-bold mb-4">{{ category }}</h2>
+      <div v-for="(group, productId) in groupByName(items)" :key="productId" class="border p-4 rounded-md shadow mb-6">
+        <h3 class="text-xl font-semibold">{{ group[0].name }}</h3>
+        <p class="text-gray-600">{{ group[0].description }}</p>
+        <div v-if="group.length > 1" class="mt-3 space-x-4">
+          <label v-for="variant in group" :key="variant.sizeId" class="inline-flex items-center space-x-2">
+            <input
+              type="radio"
+              :name="`size-${group[0].id}`"
+              :value="variant.sizeId"
+              v-model="selectedSizes[group[0].id]"
+              class="form-checkbox"
+            />
+            <span>{{ variant.size }} (₹{{ variant.price }})</span>
+          </label>
+        </div>
+        <div class="mt-4 text-lg font-medium">
+          Price: ₹{{ getSelectedPrice(group) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { reactive, computed } from 'vue'
+const rawData = {
+  "Beverages": [/* ... truncated for brevity ... */],
+  "Burgers": [/* ... */],
+  "Fries": [/* ... */],
+  "Others": [/* ... */],
+  "Pizza": [/* ... */]
+}
+
+const groupedProducts = rawData
+const selectedSizes = reactive({})
+function groupByName(items) {
+  const groups = {}
+  for (const item of items) {
+    if (!groups[item.id]) {
+      groups[item.id] = []
+    }
+    groups[item.id].push(item)
+    if (!selectedSizes[item.id]) {
+      selectedSizes[item.id] = item.sizeId || null
+    }
+  }
+  return groups
+}
+function getSelectedPrice(group) {
+  const selected = selectedSizes[group[0].id]
+  const variant = group.find(i => i.sizeId === selected)
+  return variant ? variant.price : group[0].price
+}
+</script> -->
+
