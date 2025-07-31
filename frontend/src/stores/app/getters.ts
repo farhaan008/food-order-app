@@ -20,6 +20,13 @@ export const getters = {
     }
   },
   getSearchVal: (state: State) => state.searchVal,
-  getUser: (state: State): User => state.user
+  getUser: (state: State): User => state.user,
+
+  getCustomerOrderItems: (state: State): any => {
+    return state.customerOrderItems;
+  },
+  getKitchenOrderItems: (state: State): any => {
+    return state.kitchenOrderItems;
+  }
 
 }

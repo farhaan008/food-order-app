@@ -3,23 +3,29 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 
-// Middleware
+
 app.use(cors());
 app.use(bodyParser.json());
 
-// Route Imports
-const orderRoutes = require('./routes/order');
-const paymentRoutes = require('./routes/payment');
+
 const menuRoutes = require('./routes/menu');
+const orderRoutes = require('./routes/order');
+const orderDashboardRoutes = require('./routes/order-dashboard')
+const orderKitchenDashboardRoutes = require('./routes/kitchen-dashboard')
+
+app.use('/api/menu', menuRoutes);
+app.use('/api/order', orderRoutes);
+app.use('/api/order-dashboard', orderDashboardRoutes);
+app.use('/api/kitchen-dashboard', orderKitchenDashboardRoutes);
+
+
+const paymentRoutes = require('./routes/payment');
 const generateQr = require('./routes/generate-qr');
 
-// Route Usage
-app.use('/order', orderRoutes);
-app.use('/payment-link', paymentRoutes);
-app.use('/menu', menuRoutes);
-app.use('/generate-qr', generateQr);
+app.use('/api/payment-link', paymentRoutes);
+app.use('/api/generate-qr', generateQr);
 
-// Start Server
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

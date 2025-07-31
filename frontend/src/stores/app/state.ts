@@ -7,6 +7,8 @@ export const state = () => ({
   user: JSON.parse(localStorage.getItem('user') || '{}') as User,
   cart: JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[],
   menuItems: {} as Menu,
+  customerOrderItems: [] as any,
+  kitchenOrderItems: [] as any,
   searchVal: '' as string,
   scrollTargetCategory: null as string|number|null,
 

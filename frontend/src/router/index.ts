@@ -21,9 +21,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Checkout.vue'),
   },
   {
-    path: '/order-status-board',
-    name: 'order-status-board',
-    component: () => import('@/views/order-status-board.vue'),
+    path: '/order-dashboard',
+    name: 'order-dashboard',
+    component: () => import('@/views/OrderDashboard.vue'),
+    // meta: { fullscreen: true, requiresAuth: false }
+  },
+  {
+    path: '/kitchen-dashboard',
+    name: 'kitchen-dashboard',
+    component: () => import('@/views/KitchenDashboard.vue'),
     // meta: { fullscreen: true, requiresAuth: false }
   },
   {

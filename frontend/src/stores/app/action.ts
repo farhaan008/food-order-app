@@ -18,16 +18,6 @@ export const actions = {
     }
   },
 
-  async fetchMenuItems(this: State): Promise<any> {
-    await COREAPI.getMenu().then((response) => {
-      if(response.statusCode === 200 && response.data){
-        this.menuItems = response.data || []
-      }
-    }).catch((error) => {
-      console.error('Error fetching menu:', error)
-    })
-  },
-
   setMenuItems(this: State, items: Menu): void {
     console.log('Setting menu items:', items)
     this.menuItems = items
@@ -80,6 +70,38 @@ export const actions = {
   setUser(this:State, user:User) {
     this.user = user;
     localStorage.setItem('user', JSON.stringify(user))
-  }
+  },
+
+  async fetchMenuItems(this: State): Promise<any> {
+    await COREAPI.getMenu().then((response) => {
+      if(response.statusCode === 200 && response.data){
+        this.menuItems = response.data || []
+      }
+    }).catch((error) => {
+      console.error('Error fetching menu:', error)
+    })
+  },
+
+  async getCustomerOrders(this: State): Promise<any> {
+    await COREAPI.getCustomerOrders().then((response) => {
+      console.log(response);
+      if(response.statusCode === 200 && response.data){
+        this.customerOrderItems = response.data || []
+      }
+    }).catch((error) => {
+      console.error('Error fetching menu:', error)
+    })
+  },
+
+  async getKitchenOrders(this: State): Promise<any> {
+    await COREAPI.getKitchenOrders().then((response) => {
+      console.log(response);
+      if(response.statusCode === 200 && response.data){
+        this.kitchenOrderItems = response.data || []
+      }
+    }).catch((error) => {
+      console.error('Error fetching menu:', error)
+    })
+  },
 
 }

@@ -25,9 +25,7 @@ router.get('/', (_, res) => {
       console.error('Query error:', err.message);
       return res.status(500).json({ error: 'Database query failed' });
     }
-
     const categoryMap = {};
-
     rows.forEach(row => {
       const category = row.category_name || 'Others';
       if (!categoryMap[category]) {
@@ -89,7 +87,6 @@ router.get('/', (_, res) => {
 
     res.json({ status: 'success', data: sortedMenu, statusCode: 200 });
   });
-
 
 })
 

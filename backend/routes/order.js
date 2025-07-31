@@ -27,12 +27,11 @@ router.post('/', (req, res) => {
       });
 
       stmt.finalize(() => {
-        res.json({ order_id: orderId });
+        res.json({ status: 'success', data: { orderId }, statusCode: 200 });
       });
     });
   });
 });
-
 
 router.post('/:orderId/confirm', (req, res) => {
   const { orderId } = req.params;
@@ -43,6 +42,7 @@ router.post('/:orderId/confirm', (req, res) => {
 });
 
 module.exports = router;
+
 
 
 
