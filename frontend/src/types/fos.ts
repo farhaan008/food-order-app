@@ -1,3 +1,7 @@
+export interface Menu {
+  [key: string]: MenuItem[]
+}
+
 export interface MenuItem {
   id: number
   name: string
@@ -7,10 +11,18 @@ export interface MenuItem {
   categoryId: number | null
   categoryName: string | null
   available: boolean
+  sizeId?: number
+  sizes?: Sizes[],
+  prices?: Prices[]
 }
 
-export interface Menu {
-  [key: string]: MenuItem[]
+export interface Sizes {
+  sizeId: number,
+  size: string
+}
+export interface Prices {
+  sizeId: number,
+  price: number
 }
 
 export interface CartItem extends MenuItem {
@@ -21,3 +33,12 @@ export interface User {
   name: string | null,
   mobile?: string | number | null
 }
+
+export interface Order {
+  name?: string,
+  mobile?: number | string,
+  items: MenuItem[]
+  [key: string]: any
+}
+
+

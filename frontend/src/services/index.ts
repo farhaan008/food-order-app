@@ -1,6 +1,5 @@
 import { Axios } from '@/plugins/http-common'
-
-// const END_POINT = 'core/'
+import type { Order } from '@/types/fos'
 
 class Core extends Axios {
   getMenu = (): Promise<any> => this.request('get', `menu`, true);
@@ -8,7 +7,7 @@ class Core extends Axios {
   getPaymentQr = (params:any): Promise<any> => {
     return this.request('post', 'generate-qr', true, params)
   }
-  createOrder = (params:any): Promise<any> => {
+  createOrder = (params:Order): Promise<any> => {
     return this.request('post', 'order', true, params);
   }
 }

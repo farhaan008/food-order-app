@@ -26,10 +26,10 @@
 import { defineComponent, type PropType, toRefs, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import PaymentQr from '@/components/modal/payment-qr.vue'
-import type { MenuItem } from '@/types/fos'
+import type { MenuItem, Order } from '@/types/fos'
 import { store } from '@/stores'
 import { COREAPI } from '@/services'
-import { showToast } from '@/utils/common/common-functions'
+// import { showToast } from '@/utils/common/common-functions'
 
 export default defineComponent({
   name: 'BillDetail',
@@ -71,14 +71,14 @@ export default defineComponent({
       if(cartTotal.value){
         const { name, mobile } = store.app.user;
         const items = store.app.cart;
-        let params = { name, mobile, items }
+        let params = { name, mobile, items } as Order
+        console.log(params);
         COREAPI.createOrder(params).then((response) => {
           console.log(response);
           router.push('/');
           store.app.clearCart();
         }).catch((error) => {
           console.error('Error fetching menu:', error)
-          store.app.showToast({ message: error, type: 'success', duration: 30000 })
         })
       }else{
         console.log('Cart is empty...');

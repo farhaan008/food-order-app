@@ -33,7 +33,7 @@ export const actions = {
     this.menuItems = items
   },
   addToCart(this: State, item: MenuItem): void {
-    const existing = this.cart?.find((f) => f.id === item.id)
+    const existing = this.cart?.find( (f) => f.id === item.id && f.sizeId === item.sizeId )
     if (existing) {
       existing.quantity++
     } else {
@@ -41,17 +41,25 @@ export const actions = {
     }
     localStorage.setItem('cart', JSON.stringify(this.cart))
   },
-  removeFromCart(this: State, id: string|number): void {
-    if (!this.cart || this.cart.length === 0) return
-    const item = this.cart.find((f) => f.id === id)
+  removeFromCart(this: State, id: string | number, sizeId?: number): void {
+    if (!this.cart || this.cart.length === 0) return;
+    const item = this.cart.find((f) =>
+      f.id === id && (sizeId !== undefined ? f.sizeId === sizeId : true)
+    );
     if (item) {
       if (item.quantity > 1) {
-        item.quantity--
+        item.quantity--;
       } else {
-        this.cart = this.cart.filter((f) => f.id !== id)
+        this.cart = this.cart.filter((f) =>
+          sizeId !== undefined
+            ? !(f.id === id && f.sizeId === sizeId)
+            : f.id !== id
+        );
       }
+      localStorage.setItem('cart', JSON.stringify(this.cart));
     }
   },
+
   clearCart(this: State): void {
     this.cart = [],
     localStorage.removeItem('user')

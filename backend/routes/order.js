@@ -15,21 +15,14 @@ router.post('/', (req, res) => {
 
   db.run(`INSERT INTO users (name, mobile) VALUES (?, ?)`, [name, mobile], function (err) {
     if (err) return res.status(500).json({ error: err });
-
     const userId = this.lastID;
-
     db.run(`INSERT INTO orders (user_id) VALUES (?)`, [userId], function (err) {
       if (err) return res.status(500).json({ error: 'Order insert error' });
 
       const orderId = this.lastID;
-
-      const stmt = db.prepare(`
-        INSERT INTO order_items (order_id, item_id, quantity, size_id)
-        VALUES (?, ?, ?, ?)
-      `);
-
+      const stmt = db.prepare(`INSERT INTO order_items (order_id, item_id, quantity, size_id) VALUES (?, ?, ?, ?)`);
       items.forEach(item => {
-        const sizeId = item.size_id || null; // allow null if size not provided
+        const sizeId = item.sizeId || null;
         stmt.run(orderId, item.id, item.quantity, sizeId);
       });
 

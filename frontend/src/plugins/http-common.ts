@@ -88,7 +88,8 @@ export class Axios {
     }
   }
 
-  async request(type: Method, url: string, isAuth: boolean, data?: Data): Promise<AxiosResponse> {
+  // request<T>(method: string, url: string, auth: boolean, data: T): Promise<any>
+  async request(type: string, url: string, isAuth: boolean, data?: Data): Promise<AxiosResponse> {
     this.setAuthHeader = isAuth
     try {
       let response: AxiosResponse

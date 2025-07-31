@@ -13,7 +13,7 @@ import type { ComponentPublicInstance } from 'vue'
 import MenuItem from '@/components/menu/menu-item.vue'
 import { filterMenuBySearch } from '@/composables/useMenuFilter.ts'
 import { store } from '@/stores'
-import { showToast } from '@/utils/common/common-functions'
+// import { showToast } from '@/utils/common/common-functions'
 export default defineComponent({
   name: 'Home',
   components: {
@@ -32,14 +32,6 @@ export default defineComponent({
         store.app.fetchMenuItems();
       }
     })
-
-    const addToCart = (item: any) => {
-      console.log('Adding to cart:', item)
-      store.app.addToCart(item)
-    }
-    const removeFromCart = (id: any) => {
-      store.app.removeFromCart(id)
-    }
 
     watch(() => store.app.scrollTargetCategory, (category) => {
       if (category) {
@@ -68,8 +60,6 @@ export default defineComponent({
     return {
       menuItems,
       filteredMenuItem,
-      addToCart,
-      removeFromCart,
       setCategoryRef
     }
   },

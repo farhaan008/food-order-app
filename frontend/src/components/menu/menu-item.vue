@@ -9,7 +9,13 @@
         <img :src="`/menu/${item.imageUrl}.jpg`" class="w-full h-[200px] object-cover rounded-sm" />
       </div>
       <div class="w-full">
-        <p class="text-sm text-description mb-3">{{ item.description }}</p>
+        <p class="text-sm text-description mb-2">{{ item.description }}</p>
+        <div class="flex flex-inline space-x-4 justify-start mb-3">
+          <div v-for="size in item.sizes" :key="size.sizeId" class="flex flex-inline items-center space-x-1">
+            <input type="radio" :name="'size-' + item.id" :id="'size-' + size.sizeId" :value="size.sizeId" v-model="item.sizeId" @change="onSizeChange(item, size.sizeId)" class="h-4 w-4 text-blue-600 border-gray-300"/>
+            <label :for="'size-' + size.sizeId" class="text-sm text-gray-700">{{ size.size }}</label>
+          </div>
+        </div>
         <div class="flex items-center justify-center">
           <button v-if="!quantity" @click="addToCart(item)" type="button"
             :class="!quantity ? 'px-8' : 'px-4'"
@@ -21,7 +27,7 @@
             :class="!quantity ? 'px-8' : 'px-4'"
             class="flex items-center gap-3 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none font-medium rounded-full text-md px-4 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 cursor-pointer"
           >
-            <span v-if="quantity" @click="removeFromCart(item.id)" class="inline-block">
+            <span v-if="quantity" @click="removeFromCart(item)" class="inline-block">
               <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
@@ -57,10 +63,21 @@ export default defineComponent({
     const menuItems = computed(() => store.app.getMenuItems)
 
     const addToCart = (item: any) => {
+      console.log(item);
       store.app.addToCart(item)
     }
-    const removeFromCart = (id: any) => {
-      store.app.removeFromCart(id)
+    const removeFromCart = (item: { id: string | number; sizeId?: number }) => {
+      if (item.sizeId !== undefined) {
+        store.app.removeFromCart(item.id, item.sizeId)
+      } else {
+        store.app.removeFromCart(item.id)
+      }
+    }
+
+    const onSizeChange = (item: MenuItem, sizeId: number) => {
+      const price = item.prices?.find((f) => f.sizeId === sizeId)?.price || 0;
+      item.price = price;
+      store.app.getCartTotal;
     }
 
     return {
@@ -68,6 +85,7 @@ export default defineComponent({
       quantity,
       addToCart,
       removeFromCart,
+      onSizeChange
     }
   },
 })
