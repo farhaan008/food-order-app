@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import Modal from '@/components/global/modal.vue'
-import CartItem from '@/components/cart/cart-item.vue'
+import CartItem from '@/components/dashboard/cart-item.vue'
 
 export default defineComponent({
   name: 'ViewCart',

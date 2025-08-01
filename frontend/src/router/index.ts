@@ -9,9 +9,9 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        name: 'Home',
-        component: () => import('@/views/Home.vue'),
-        meta: { keepAlive: true }
+        name: 'Menu',
+        component: () => import('@/views/Menu.vue'),
+        meta: { keepAlive: true, sidebar: 'SideMenu' }
       },
     ],
   },
@@ -21,15 +21,21 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Checkout.vue'),
   },
   {
+    path: '/kitchen-dashboard',
+    name: 'kitchen-dashboard',
+    component: () => import('@/layouts/applayout.vue'),
+    meta: { sidebar: 'KitchenMenu' },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/KitchenDashboard.vue'),
+      }
+    ]
+  },
+  {
     path: '/order-dashboard',
     name: 'order-dashboard',
     component: () => import('@/views/OrderDashboard.vue'),
-    // meta: { fullscreen: true, requiresAuth: false }
-  },
-  {
-    path: '/kitchen-dashboard',
-    name: 'kitchen-dashboard',
-    component: () => import('@/views/KitchenDashboard.vue'),
     // meta: { fullscreen: true, requiresAuth: false }
   },
   {

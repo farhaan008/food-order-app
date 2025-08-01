@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white py-1 border-b border-gray-300">
+  <header class="bg-white border-b border-gray-300">
     <div class="grid grid-cols-[40px_1fr] grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4 p-4">
       <div class="md:hidden col-start-1 row-start-1 flex items-center">
         <div @click="toggleNavbar" class="flex lg:hidden md:hidden sm:block">

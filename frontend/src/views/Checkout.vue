@@ -40,8 +40,8 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs, onMounted } from 'vue'
 import type { User } from '@/types/fos'
-import CartItem from '@/components/cart/cart-item.vue'
-import BillDetail from '@/components/cart/bill-detail.vue'
+import CartItem from '@/components/dashboard/cart-item.vue'
+import BillDetail from '@/components/dashboard/bill-detail.vue'
 import UserDetail from '@/components/modal/user-detail.vue'
 import { store } from '@/stores'
 

@@ -10,12 +10,12 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, watch } from 'vue'
 import type { ComponentPublicInstance } from 'vue'
-import MenuItem from '@/components/menu/menu-item.vue'
+import MenuItem from '@/components/dashboard/menu-item.vue'
 import { filterMenuBySearch } from '@/composables/useMenuFilter.ts'
 import { store } from '@/stores'
 // import { showToast } from '@/utils/common/common-functions'
 export default defineComponent({
-  name: 'Home',
+  name: 'Menu',
   components: {
     MenuItem,
   },
