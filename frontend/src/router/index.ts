@@ -21,13 +21,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Checkout.vue'),
   },
   {
-    path: '/kitchen-dashboard',
-    name: 'kitchen-dashboard',
+    path: '/kitchen',
+    name: 'kitchen',
     component: () => import('@/layouts/applayout.vue'),
     meta: { sidebar: 'KitchenMenu' },
     children: [
       {
-        path: '',
+        path: '/',
+        name: 'kitchen-dashboard',
         component: () => import('@/views/KitchenDashboard.vue'),
       }
     ]

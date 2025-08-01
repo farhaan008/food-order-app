@@ -5,8 +5,7 @@
     </div>
     <div v-if="navExpand" @click="onClickOutside" class="fixed inset-0 bg-black opacity-5 h-full w-full z-20 lg:hidden md:hidden sm:block"></div>
     <aside :class="navExpand ? 'open-sidebar' : ''" class="sidebar p-3 border-r border-gray-200 z-50 bg-white">
-      <!-- <SideBar :type="sidebarType" :navExpand="navExpand" /> -->
-      <SideBar :type="'SideMenu'" :navExpand="navExpand"></SideBar>
+      <SideBar :type="sidebarType"></SideBar>
     </aside>
     <main class="main grid grid-rows-[auto, 1fr] h-screen">
       <HeaderBar @toggleNavbar="navExpand = !navExpand"></HeaderBar>
@@ -26,14 +25,16 @@ import SideBar from './sidebar.vue'
 import HeaderBar from './header.vue'
 import Dashboard from './dashboard.vue'
 import NotifyVue from  '@/components/elements/notify.vue'
-const route = useRoute();
-const sidebarType = computed(() => route.meta.sidebar || 'SideMenu');
 
 export default defineComponent({
   name: 'LayoutContainer',
   components: { SideBar, HeaderBar, Dashboard, NotifyVue },
 
   setup() {
+    const route = useRoute();
+    const sidebarType = computed(() =>
+      route.meta?.sidebar || 'SideMenu'
+    );
     const width = 768
     const { body } = document
 
@@ -80,8 +81,8 @@ export default defineComponent({
       navExpand,
       sidebar,
       showLoader,
+      sidebarType,
       onClickOutside,
-      sidebarType
     }
   },
 })

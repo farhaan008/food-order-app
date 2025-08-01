@@ -17,6 +17,7 @@ export default defineComponent({
   name: 'SideBar',
   components: {
     SideMenu,
+    KitchenMenu
   },
   props: {
     type: {
@@ -26,7 +27,7 @@ export default defineComponent({
   },
   setup(_, { emit }) {
     const loadComponent = computed(() => {
-      return _.type === 'SideMenu' ? SideMenu : KitchenMenu;
+      return _.type;
     });
     return {
       loadComponent
