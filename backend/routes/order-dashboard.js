@@ -6,17 +6,19 @@ router.get('/', (_, res) => {
   
   const query = `
     SELECT
-        o.id AS order_id,
-        o.created_at,
-        o.status AS order_status,
-        mi.name AS item_name,
-        isz.size AS item_size,
-        oi.quantity,
-        oi.kitchen_status
+    o.id AS order_id,
+    o.created_at,
+    o.status AS order_status,
+    mi.name AS item_name,
+    isz.size AS item_size,
+    oi.quantity,
+    oi.kitchen_status,
+    u.name AS customer_name
     FROM orders o
     JOIN order_items oi ON o.id = oi.order_id
     JOIN menu_items mi ON oi.item_id = mi.id
     LEFT JOIN item_sizes isz ON oi.size_id = isz.id
+    LEFT JOIN users u ON o.user_id = u.id
     ORDER BY o.created_at DESC, o.id, oi.id;
   `;
   // o.payment_status,
@@ -31,6 +33,7 @@ router.get('/', (_, res) => {
       if (!ordersMap[row.order_id]) {
         ordersMap[row.order_id] = {
             order_id: row.order_id,
+            customer_name: row.customer_name,
             created_at: row.created_at,
             order_status: row.order_status,
             payment_status: row.payment_status,

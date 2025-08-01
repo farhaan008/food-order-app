@@ -1,5 +1,5 @@
 import { Axios } from '@/plugins/http-common'
-import type { Order } from '@/types/fos'
+import type { Order, KitchenStatus } from '@/types/fos'
 
 class Core extends Axios {
 
@@ -16,6 +16,10 @@ class Core extends Axios {
 
   getPaymentQr = (params:any): Promise<any> => {
     return this.request('post', 'api/generate-qr', true, params)
+  }
+
+  updateOrderItemStatus = (orderId: string, itemId: string, params: KitchenStatus): Promise<any> =>{
+    return this.request('put', `api/order/${orderId}/item/${itemId}/status`, true, params)
   }
 
 }

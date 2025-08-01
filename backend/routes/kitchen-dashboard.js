@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
         o.created_at,
         mi.name AS item_name,
         isz.size AS item_size,
+        oi.id,
         oi.quantity,
         oi.kitchen_status
     FROM orders o
@@ -35,6 +36,7 @@ router.get('/', (req, res) => {
           };
       }
       ordersMap[row.order_id].items.push({
+          id: row.id,
           item_name: row.item_name,
           item_size: row.item_size,
           quantity: row.quantity,

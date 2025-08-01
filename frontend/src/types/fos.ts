@@ -41,4 +41,9 @@ export interface Order {
   [key: string]: any
 }
 
+export interface KitchenStatus {
+  kitchen_status: 'queued' | 'preparing' | 'ready' | 'served';
+  [key: string]: any;
+}
+
 
