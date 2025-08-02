@@ -1,9 +1,9 @@
 <template>
   <nav>
-    <ul class="list-none flex flex-col gap-y-2">
+    <ul class="list-none flex flex-col gap-y-1">
       <li v-for="(_, category) in menuItems" @click="categoryClick(category)" class="flex flex-col gap-x-2">
         <a class="flex justify-start px-3 py-1 items-center text-gray-800 cursor-pointer">
-          <span class="text-sm">{{ category }}</span>
+          <span class="text-md">{{ category }}</span>
         </a>
       </li>
     </ul>

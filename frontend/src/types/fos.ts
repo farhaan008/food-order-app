@@ -45,5 +45,33 @@ export interface KitchenStatus {
   kitchen_status: 'queued' | 'preparing' | 'ready' | 'served';
   [key: string]: any;
 }
+export type TypeKitchenStatus = 'queued' | 'preparing' | 'ready' | 'served';
+
+export interface OrderItem {
+  id: number;
+  item_name: string;
+  item_size: string | null;
+  quantity: number;
+  kitchen_status: TypeKitchenStatus;
+  _isReady?: boolean;
+}
+
+export interface KitchenDashboard {
+  order_id: number;
+  created_at: string | Date;
+  items: OrderItem[];
+}
+
+export interface ApiResponse {
+  status: 'success' | 'error' | string;
+  message: string;
+  data: {
+    order_id: string;
+    item_id: string;
+    kitchen_status: 'queued' | 'preparing' | 'ready' | 'served' | string;
+  };
+  statusCode: number;
+}
+
 
 

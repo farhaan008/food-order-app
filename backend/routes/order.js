@@ -49,7 +49,7 @@ module.exports = function (io) {
     const query = `
       UPDATE order_items
       SET kitchen_status = ?
-      WHERE order_id = ? AND item_id = ?
+      WHERE order_id = ? AND id = ?
     `;
 
     db.run(query, [kitchen_status, orderId, itemId], function (err) {

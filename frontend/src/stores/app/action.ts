@@ -1,7 +1,7 @@
 import type { Notify } from '@/types/elements/notify'
 import type { State } from './state'
 import { COREAPI } from '@/services'
-import type { Menu, MenuItem, User } from '@/types/fos'
+import type { Menu, MenuItem, User, ApiResponse, OrderItem, KitchenDashboard } from '@/types/fos'
 
 export const actions = {
   setLoading(this: State, isLoading: boolean): void {
@@ -95,8 +95,12 @@ export const actions = {
 
   async getKitchenOrders(this: State): Promise<any> {
     await COREAPI.getKitchenOrders().then((response) => {
-      console.log(response);
       if(response.statusCode === 200 && response.data){
+        response.data.forEach( (fe:KitchenDashboard) => {
+          fe.items.forEach((fei) => {
+            fei._isReady = fei.kitchen_status === 'ready';
+          })
+        });
         this.kitchenOrderItems = response.data || []
       }
     }).catch((error) => {

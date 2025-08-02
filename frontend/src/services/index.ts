@@ -18,7 +18,7 @@ class Core extends Axios {
     return this.request('post', 'api/generate-qr', true, params)
   }
 
-  updateOrderItemStatus = (orderId: string, itemId: string, params: KitchenStatus): Promise<any> =>{
+  updateOrderItemStatus = (orderId: string, itemId: number, params: KitchenStatus): Promise<any> =>{
     return this.request('put', `api/order/${orderId}/item/${itemId}/status`, true, params)
   }
 

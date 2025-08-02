@@ -16,11 +16,12 @@ router.get('/', (req, res) => {
     JOIN order_items oi ON o.id = oi.order_id
     JOIN menu_items mi ON oi.item_id = mi.id
     LEFT JOIN item_sizes isz ON oi.size_id = isz.id
-    WHERE o.status != 'cancelled' -- optional: exclude cancelled
-    ORDER BY o.created_at ASC, o.id, oi.id;
+    WHERE o.status != 'cancelled'
+    ORDER BY datetime(o.created_at) DESC, o.id, oi.id;
   `;
 
   db.all(query, [], (err, rows) => {
+    // console.log('Sorted rows:', rows.map(r => r.created_at));
     if (err) {
         console.error('Database error:', err.message);
         return res.status(500).json({ error: 'Internal server error' });
@@ -44,7 +45,9 @@ router.get('/', (req, res) => {
       });
     });
 
-    const result = Object.values(ordersMap);
+    const result = Object.values(ordersMap).sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
     res.json({ data: result, status: 'success', statusCode: 200 });
 
   });
