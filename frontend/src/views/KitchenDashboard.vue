@@ -1,6 +1,14 @@
 <template>
-  <h1>I am kitchen Dashboard</h1>
-  {{ kitchenOrders }}
+    <div class="w-full">
+      <h3 class="text-lg text-black-700 font-semibold p-3">Order: 78</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="flex justify-center items-center p-3 border-b border-gray-200">
+          <div class="flex w-full flex-col gap-4">
+            <p>Hello</p>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue'
