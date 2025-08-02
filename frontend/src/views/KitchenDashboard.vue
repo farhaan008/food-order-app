@@ -47,3 +47,28 @@ export default defineComponent({
   })
 } -->
 
+
+
+<!-- SELECT
+    o.id AS order_id,
+    o.created_at,
+    oi.id AS order_item_id,
+    oi.quantity,
+    oi.kitchen_status,
+    m.name AS item_name,
+    u.name AS customer_name
+FROM
+    orders o
+JOIN
+    order_items oi ON o.id = oi.order_id
+JOIN
+    menu_items m ON oi.item_id = m.id
+JOIN
+    users u ON o.user_id = u.id
+WHERE
+    o.status IN ('confirmed', 'in_progress')
+    AND oi.kitchen_status IN ('queued', 'preparing', 'ready')
+ORDER BY
+    o.created_at ASC, oi.kitchen_status ASC; -->
+
+

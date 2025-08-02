@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '',
         name: 'Menu',
         component: () => import('@/views/Menu.vue'),
-        meta: { keepAlive: true, sidebar: 'SideMenu' }
+        meta: { keepAlive: true, sidebar: 'SideMenu', header: 'MenuHeader' }
       },
     ],
   },
@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/kitchen',
     name: 'kitchen',
     component: () => import('@/layouts/applayout.vue'),
-    meta: { sidebar: 'KitchenMenu' },
+    meta: { sidebar: 'KitchenMenu', header: 'KitchenHeader' },
     children: [
       {
         path: '/',
