@@ -6,6 +6,7 @@ router.get('/', (req, res) => {
   const query = `
     SELECT
         o.id AS order_id,
+        o.status AS order_status,
         o.created_at,
         mi.name AS item_name,
         isz.size AS item_size,
@@ -32,6 +33,7 @@ router.get('/', (req, res) => {
       if (!ordersMap[row.order_id]) {
           ordersMap[row.order_id] = {
               order_id: row.order_id,
+              order_status: row.order_status,
               created_at: row.created_at,
               items: []
           };

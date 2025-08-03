@@ -98,7 +98,7 @@ export const actions = {
       if(response.statusCode === 200 && response.data){
         response.data.forEach( (fe:KitchenDashboard) => {
           fe.items.forEach((fei) => {
-            fei._isReady = fei.kitchen_status === 'ready';
+            fei._isReady = fei.kitchen_status === 'ready' || fei.kitchen_status === 'served';
           })
         });
         this.kitchenOrderItems = response.data || []

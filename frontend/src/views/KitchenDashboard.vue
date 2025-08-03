@@ -15,13 +15,25 @@
                       <span>{{ i.quantity }}</span>
                     </div>
                   </label>
-                  <input @input="updateItemOrderStatus(item.order_id, i)" :id="i.id" v-model="i._isReady" type="checkbox" value="" class="w-6 h-6 ms-3">
+                  <input :id="i.id" v-model="i._isReady"
+                  :disabled="i.kitchen_status === 'queued' || i.kitchen_status === 'ready' || i.kitchen_status === 'served'"
+                  type="checkbox" value="" class="w-6 h-6 ms-3">
                 </div>
               </li>
             </ul>
             <div class="flex justify-between space-x-6">
-              <button class="bg-red-300 hover:bg-red-400 text-black text-sm font-medium py-2 px-4 rounded-md border border-gray-600 focus:outline-none">Cancel</button>
-              <button class="bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2 px-6 rounded-md border border-gray-900 focus:outline-none">Start</button>
+              <button class="bg-red-300 hover:bg-red-400 text-black text-sm font-medium py-2 px-4 rounded-md border border-gray-600 focus:outline-none"
+                :disabled="checkOrderItemStatus(item.items) !== 'queued'"
+                :class="checkOrderItemStatus(item.items) !== 'queued'? 'cursor-not-allowed':''">
+                Cancel
+              </button>
+
+              <button class="bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2 px-6 rounded-md border border-gray-900 focus:outline-none"
+                @click="updateOrderItemAndOrderStatus(item.order_id, item.items)"
+                :disabled="isActionButtonDisabled(item.items)"
+                :class="{'opacity-80 cursor-not-allowed': isActionButtonDisabled(item.items) }">
+                {{ getBtnStatusText(item.items) }}
+              </button>
             </div>
           </div>
         </div>
@@ -45,23 +57,103 @@ export default defineComponent({
       store.app.getKitchenOrders();
     })
 
-    const updateItemOrderStatus = (orderId:string, orderItem:OrderItem) => {
+    const updateOrderItemKitchenStatus = (orderId:string, orderItem:OrderItem) => {
       console.log(orderId, orderItem);
-      if(orderItem.kitchen_status === 'queued'){
+      if(orderItem.kitchen_status === 'preparing'){
         let params = { kitchen_status: 'ready' } as KitchenStatus
-        COREAPI.updateOrderItemStatus(orderId, orderItem.id, params).then((response:ApiResponse) => {
+        COREAPI.updateOrderItemKitchenStatus(orderId, orderItem.id, params).then((response:ApiResponse) => {
           console.log(response);
           if(response && response.statusCode){
             console.log(response.message)
           }
         }).catch((e) => { console.log(e) } );
+        store.app.getKitchenOrders();
       }
-      store.app.getKitchenOrders();
     }
+
+    const updateOrderItemAndOrderStatus = (orderId:string, items:OrderItem[]) => {
+      let kitchen_status = checkOrderItemStatus(items) as 'queued' | 'preparing' | 'ready' | 'served';
+      let params = { kitchen_status: kitchen_status }
+      if(kitchen_status === 'queued'){
+        params.kitchen_status = 'preparing';
+      }
+      if(kitchen_status === 'preparing'){
+        params.kitchen_status = 'ready';
+      }
+      if(kitchen_status === 'ready'){
+        params.kitchen_status = 'served';
+      }
+      console.log(orderId, params);
+      COREAPI.updateOrderItemAndOrderStatus(orderId, params).then((response:ApiResponse) => {
+        console.log(response);
+        if(response && response.statusCode){
+          console.log(response.message)
+        }
+        store.app.getKitchenOrders();
+      }).catch((e) => { console.log(e) } );
+
+    }
+
+
+    const checkOrderItemStatus = (items:OrderItem[]) => {
+      if(items.every(e=> e.kitchen_status === 'queued')){
+        return 'queued';
+      }
+      if(items.every(e=> e.kitchen_status === 'ready')){
+        return 'ready';
+      }
+      if(items.every(e=> e.kitchen_status === 'served')){
+        return 'served';
+      }
+      if(items.some(e=> e.kitchen_status === 'preparing')){
+        return 'preparing';
+      }
+      return 'queued';
+    }
+
+    const getBtnStatusText = (items:OrderItem[]) => {
+      if(items && items.length){
+        const status =  checkOrderItemStatus(items);
+        switch (status) {
+          case 'queued': return 'Start';
+          case 'preparing': return 'Ready';
+          case 'ready': return 'Complete';
+          case 'served': return 'Served';
+          default: return 'Queued';
+        }
+      }
+    }
+
+    const isActionButtonDisabled = (items: OrderItem[]): boolean => {
+      const status = checkOrderItemStatus(items);
+      if(status === 'served'){
+        return true;
+      }
+      if(status === 'preparing' && !isAllItemChecked(items)){
+        return true;
+      }
+      return false;
+    }
+
+    const isAllItemChecked = (items:OrderItem[]): boolean => {
+      return items.every((e)=> e._isReady === true )
+    }
+
+    // function getOrderStatus(itemStatuses) {
+    //   if (itemStatuses.every(s => s === 'ready' || s === 'served')) return 'completed';
+    //   if (itemStatuses.every(s => s === 'queued')) return 'queued';
+    //   if (itemStatuses.some(s => s === 'preparing')) return 'preparing';
+    //   return 'in_progress';
+    // }
 
     return {
       kitchenOrders,
-      updateItemOrderStatus
+      getBtnStatusText,
+      isAllItemChecked,
+      checkOrderItemStatus,
+      isActionButtonDisabled,
+      updateOrderItemKitchenStatus,
+      updateOrderItemAndOrderStatus
     }
   }
 })
@@ -112,5 +204,3 @@ WHERE
     AND oi.kitchen_status IN ('queued', 'preparing', 'ready')
 ORDER BY
     o.created_at ASC, oi.kitchen_status ASC; -->
-
-

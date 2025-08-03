@@ -79,8 +79,139 @@ module.exports = function (io) {
     });
   });
 
+
+  // router.put('/:orderId/item/status', (req, res) => {
+  //   const { orderId } = req.params;
+  //   const { kitchen_status } = req.body;
+
+  //   console.log('Params:', req.params);
+  //   console.log('Body:', req.body);
+
+  //   const validStatuses = ['queued', 'preparing', 'ready', 'served'];
+  //   if (!validStatuses.includes(kitchen_status)) {
+  //     return res.status(400).json({ error: 'Invalid kitchen_status value' });
+  //   }
+
+  //   const query = `UPDATE order_items SET kitchen_status = ? WHERE order_id = ?`;
+  //   db.run(query, [kitchen_status, orderId], function (err) {
+  //     if (err) {
+  //       console.error('DB error:', err.message);
+  //       return res.status(500).json({ error: 'Failed to update kitchen_status' });
+  //     }
+
+  //     if (this.changes === 0) {
+  //       return res.status(404).json({ error: 'No order_items found for the given order_id' });
+  //     }
+
+  //     let newOrderStatus = null;
+  //     switch (kitchen_status) {
+  //       case 'preparing':
+  //         newOrderStatus = 'in_progress';
+  //         break;
+  //       case 'ready':
+  //         newOrderStatus = 'ready';
+  //         break;
+  //       case 'served':
+  //         newOrderStatus = 'delivered';
+  //         break;
+  //       default:
+  //         newOrderStatus = 'confirmed';
+  //     }
+  //     const updateOrderQuery = `UPDATE orders SET status = ? WHERE id = ?`;
+  //     db.run(updateOrderQuery, [newOrderStatus, orderId], function (orderErr) {
+  //       if (orderErr) {
+  //         console.error('Failed to update order status:', orderErr.message);
+  //         return res.status(500).json({ error: 'Kitchen status updated, but failed to update order status' });
+  //       }
+  //       const data = { order_id: orderId, kitchen_status, order_status: newOrderStatus };
+  //       if (io && io.emit) {
+  //         io.emit('order_update', data);
+  //       }
+  //       return res.status(200).json({ status: 'success', message: 'Kitchen and order status updated successfully', data });
+  //     });
+
+  //     const data = { order_id: orderId, kitchen_status };
+  //     if (io && io.emit) {
+  //       io.emit('order_update', data);
+  //     }
+  //     return res.status(200).json({ status: 'success', message: 'Kitchen status updated successfully', data });
+
+  //   });
+  // });
+
+
+  router.put('/:orderId/item/status', (req, res) => {
+    const { orderId } = req.params;
+    const { kitchen_status } = req.body;
+
+    const validStatuses = ['queued', 'preparing', 'ready', 'served'];
+    if (!validStatuses.includes(kitchen_status)) {
+      return res.status(400).json({ error: 'Invalid kitchen_status value' });
+    }
+
+    const updateItemsQuery = `UPDATE order_items SET kitchen_status = ? WHERE order_id = ?`;
+
+    db.run(updateItemsQuery, [kitchen_status, orderId], function (err) {
+      if (err) {
+        console.error('DB error (order_items):', err.message);
+        return res.status(500).json({ error: 'Failed to update kitchen_status' });
+      }
+
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'No order_items found for the given order_id' });
+      }
+
+      let newOrderStatus;
+      switch (kitchen_status) {
+        case 'preparing':
+          newOrderStatus = 'in_progress';
+          break;
+        case 'ready':
+          newOrderStatus = 'ready';
+          break;
+        case 'served':
+          newOrderStatus = 'served';
+          break;
+        default:
+          newOrderStatus = 'confirmed';
+      }
+
+      const updateOrderQuery = `UPDATE orders SET status = ? WHERE id = ?`;
+
+      db.run(updateOrderQuery, [newOrderStatus, orderId], function (orderErr) {
+        if (orderErr) {
+          console.error('DB error (orders):', orderErr.message);
+          // ⚠️ Don't call `res.status(...).json(...)` here if already sent!
+          return res.status(500).json({
+            error: 'Kitchen status updated, but failed to update order status'
+          });
+        }
+
+        // Only respond once, after both updates succeed
+        const data = {
+          order_id: orderId,
+          kitchen_status,
+          order_status: newOrderStatus,
+        };
+
+        if (io && io.emit) {
+          io.emit('order_update', data);
+        }
+
+        return res.status(200).json({
+          status: 'success',
+          message: 'Kitchen and order status updated successfully',
+          data,
+        });
+      });
+    });
+  });
+
+
   return router;
 };
+
+
 
 
 // router.post('/:orderId', (req, res) => {
