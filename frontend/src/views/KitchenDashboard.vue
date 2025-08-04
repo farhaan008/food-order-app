@@ -2,20 +2,20 @@
     <div class="w-full">
       <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <div v-for="item in kitchenOrders" :key="item.order_id" class="flex justify-center items-center p-3 border-b border-gray-200">
+        <div v-for="item in filteredOrders" :key="item.order_id" class="flex justify-center items-center p-3 border-b border-gray-200">
           <div class="flex justify-between w-full flex-col gap-4 h-full">
             <h3 class="text-lg text-black-700 font-semibold">Order: {{ item.order_id }}</h3>
             <ul class="list-none border border-gray-200 rounded-md p-3">
               <li v-for="i in item.items" :key="i.id" class="w-full border-gray-200 dark:border-gray-600">
                 <div class="flex items-center space-x-4">
-                  <label :for="i.id" class="flex justify-between w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  <label :for="`${i.id}`" class="flex justify-between w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
                     <span>{{ i.item_name}}</span>
                     <div class="flex flex-inline space-x-3">
                       <span v-if="i.item_size">{{ i.item_size }}</span>
                       <span>{{ i.quantity }}</span>
                     </div>
                   </label>
-                  <input :id="i.id" v-model="i._isReady"
+                  <input :id="`${i.id}`" v-model="i._isReady"
                   :disabled="i.kitchen_status === 'queued' || i.kitchen_status === 'ready' || i.kitchen_status === 'served'"
                   type="checkbox" value="" class="w-6 h-6 ms-3">
                 </div>
@@ -29,7 +29,7 @@
               </button>
 
               <button class="bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2 px-6 rounded-md border border-gray-900 focus:outline-none"
-                @click="updateOrderItemAndOrderStatus(item.order_id, item.items)"
+                @click="updateOrderItemAndOrderStatus(`${item.order_id}`, item.items)"
                 :disabled="isActionButtonDisabled(item.items)"
                 :class="{'opacity-80 cursor-not-allowed': isActionButtonDisabled(item.items) }">
                 {{ getBtnStatusText(item.items) }}
@@ -42,22 +42,30 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, computed, onMounted, ref, watch } from 'vue'
 import { store } from '@/stores'
 import type { KitchenStatus, OrderItem, ApiResponse, KitchenDashboard } from '@/types/fos';
+import { useKitchenOrdersFilter } from '@/composables/useKitchenOrdersFilter';
 import { COREAPI } from '@/services';
 
 export default defineComponent({
   components: { },
   name: 'KitchenDashboard',
   setup() {
-
+    // const filterStatus = ref('confirmed');
+    const filterStatus = computed(() => store.app.kitchenFilterVal);
     const kitchenOrders = computed(() => store.app.getKitchenOrderItems);
+    const filteredOrders = computed(() =>{
+        if(filterStatus.value)
+        return useKitchenOrdersFilter(kitchenOrders.value, filterStatus.value)
+        else return kitchenOrders.value;
+      }
+    )
     onMounted(() => {
       store.app.getKitchenOrders();
     })
 
-    const updateOrderItemKitchenStatus = (orderId:string, orderItem:OrderItem) => {
+    const updateOrderItemKitchenStatus = (orderId:any, orderItem:OrderItem) => {
       console.log(orderId, orderItem);
       if(orderItem.kitchen_status === 'preparing'){
         let params = { kitchen_status: 'ready' } as KitchenStatus
@@ -147,7 +155,7 @@ export default defineComponent({
     // }
 
     return {
-      kitchenOrders,
+      filteredOrders,
       getBtnStatusText,
       isAllItemChecked,
       checkOrderItemStatus,

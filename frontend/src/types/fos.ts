@@ -58,6 +58,7 @@ export interface OrderItem {
 
 export interface KitchenDashboard {
   order_id: number;
+  order_status: string,
   created_at: string | Date;
   items: OrderItem[];
 }

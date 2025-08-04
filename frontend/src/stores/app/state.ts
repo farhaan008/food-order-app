@@ -11,6 +11,7 @@ export const state = () => ({
   kitchenOrderItems: [] as any,
   searchVal: '' as string,
   scrollTargetCategory: null as string|number|null,
+  kitchenFilterVal: null as string | null,
 
 })
 

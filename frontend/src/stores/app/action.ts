@@ -63,6 +63,10 @@ export const actions = {
   triggerScroll(this:State, categoryId:string|number) {
     this.scrollTargetCategory = categoryId
   },
+  setKitchenFilterVal(this:State, val: string) {
+    this.kitchenFilterVal = val;
+  },
+
   clearScrollTarget(this:State) {
     this.scrollTargetCategory = null;
   },

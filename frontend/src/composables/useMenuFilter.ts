@@ -1,5 +1,4 @@
-import type { Menu } from '@/types/fos'
-import type { MenuItem } from '@/types/fos'
+import type { Menu, MenuItem } from '@/types/fos'
 
 export function filterMenuBySearch(menuItems: Menu, searchTerm: string): Menu {
   const term = searchTerm.trim().toLowerCase()
@@ -20,3 +19,4 @@ export function filterMenuBySearch(menuItems: Menu, searchTerm: string): Menu {
 
   return filtered
 }
+
