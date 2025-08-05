@@ -60,14 +60,14 @@ export default defineComponent({
   name: 'KitchenDashboard',
   setup() {
 
-
     const searchVal = computed(() => store.app.getSearchVal)
     const filterStatus = computed(() => store.app.kitchenFilterVal);
     const kitchenOrders = computed(() => store.app.getKitchenOrderItems);
     const filteredOrders = computed(() => {
-      if(searchVal){
+      if(searchVal.value){
         return useOrderSearch(kitchenOrders.value, searchVal.value)
-      }else if(filterStatus.value){
+      }
+      if(filterStatus.value){
         return useKitchenOrdersFilter(kitchenOrders.value, filterStatus.value)
       }else{
         return kitchenOrders.value;
