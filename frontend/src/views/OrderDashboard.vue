@@ -1,15 +1,16 @@
 <template>
-  <div class="bg-gray-900 w-full h-screen p-3">
-    <div class="rounded-md py-3 px-4">
-      <div class="flex flex-col">
-        <div class="flex flex-col mb-3 text-white">
+  <div class="bg-gray-900 w-full h-screen px-3">
+    <div class="flex flex-col gap-y-3 py-3 px-4">
+      <div class="flex justify-between items-center gap-y-2 py-3 px-4 rounded-lg">
+        <div class="text-2xl font-bold text-white">RR Cafe</div>
+        <div class="flex flex-col text-white">
           <h3 class="text-lg">Order Dashboard</h3>
           <p class="text-xs">A list of customers order</p>
         </div>
       </div>
       <div class="relative overflow-x-auto">
           <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-lg text-white border-b border-white rounded-md shadow-md uppercase">
+              <thead class="text-md text-white border-b border-white rounded-md shadow-md uppercase">
                 <tr>
                   <th scope="col" class="px-6 py-3">Order ID</th>
                   <th scope="col" class="px-6 py-3">Customer Name</th>

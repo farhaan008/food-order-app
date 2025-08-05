@@ -35,18 +35,20 @@
     </div>
   </div>
   <user-detail :show="show" @close="show = false" :modalClass="'max-w-md'" :showCloseButton="false"></user-detail>
+  <NotifyVue></NotifyVue>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, onMounted } from 'vue'
 import type { User } from '@/types/fos'
+import { defineComponent, reactive, toRefs, onMounted } from 'vue'
+import NotifyVue from  '@/components/elements/notify.vue'
 import CartItem from '@/components/dashboard/cart-item.vue'
 import BillDetail from '@/components/dashboard/bill-detail.vue'
 import UserDetail from '@/components/modal/user-detail.vue'
 import { store } from '@/stores'
 
 export default defineComponent({
-  components: { CartItem, BillDetail, UserDetail },
+  components: { CartItem, BillDetail, UserDetail, NotifyVue },
   name: 'Checkout',
   setup() {
     const Obj = reactive({

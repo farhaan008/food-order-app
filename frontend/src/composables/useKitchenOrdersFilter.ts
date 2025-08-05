@@ -15,6 +15,9 @@ export function useKitchenOrdersFilter(orders:KitchenDashboard[], filterStatus:s
     if (filterStatus === 'ready') {
       return orders.filter(order => order.order_status === 'ready')
     }
+    if( filterStatus === 'served') {
+      return orders.filter(order => order.order_status === 'served')
+    }
   }
   return orders as KitchenDashboard[]
 }

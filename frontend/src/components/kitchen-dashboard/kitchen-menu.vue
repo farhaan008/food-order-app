@@ -10,7 +10,7 @@
   </nav>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, onMounted, reactive, toRefs } from 'vue'
 import { store } from '@/stores'
 
 export default defineComponent({
@@ -22,15 +22,18 @@ export default defineComponent({
         { name: 'New Orders', val: 'new'},
         { name: 'Preparing', val: 'preparing'},
         { name: 'Ready', val: 'ready'},
-        { name: 'All', val: 'all'},
+        { name: 'Completed', val: 'served'},
       ]
     });
 
     const onFilterClick = (val:string|number|null) => {
       console.log(val);
       store.app.setKitchenFilterVal(val);
-
     }
+
+    onMounted(()=>{
+      onFilterClick('new');
+    })
 
     return {
       ...toRefs(Obj),
