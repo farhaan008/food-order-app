@@ -20,8 +20,9 @@ export default defineComponent({
     MenuItem,
   },
   setup() {
+
     const menuItems = computed(() => store.app.getMenuItems)
-    const searchVal = computed(() => store.app.searchVal)
+    const searchVal = computed(() => store.app.getSearchVal)
     const filteredMenuItem = computed(() =>
       filterMenuBySearch(menuItems.value, searchVal.value)
     )
@@ -62,7 +63,8 @@ export default defineComponent({
       filteredMenuItem,
       setCategoryRef
     }
-  },
+  }
+
 })
 </script>
 <style scoped></style>

@@ -2,30 +2,31 @@
   <div class="bg-gray-900 w-full h-screen px-3">
     <div class="flex flex-col gap-y-3 py-3 px-4">
       <div class="flex justify-between items-center gap-y-2 py-3 px-4 rounded-lg">
-        <div class="text-2xl font-bold text-white">RR Cafe</div>
-        <div class="flex flex-col text-white">
+        <div class="text-2xl font-bold text-gray-100">RR Cafe</div>
+        <div class="flex flex-col text-gray-100">
           <h3 class="text-lg">Order Dashboard</h3>
           <p class="text-xs">A list of customers order</p>
         </div>
       </div>
+      <!-- border border-gray-600 rounded-lg -->
       <div class="relative overflow-x-auto">
-          <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-md text-white border-b border-white rounded-md shadow-md uppercase">
+          <table class="w-full text-left text-gray-200">
+              <thead class="text-md uppercase bg-gray-800">
                 <tr>
-                  <th scope="col" class="px-6 py-3">Order ID</th>
-                  <th scope="col" class="px-6 py-3">Customer Name</th>
-                  <th scope="col" class="px-6 py-3">Order Status</th>
-                  <th scope="col" class="px-6 py-3">Created Time</th>
+                  <th scope="col" class="px-6 py-5 rounded-s-lg">Order ID</th>
+                  <th scope="col" class="px-6 py-5">Customer Name</th>
+                  <th scope="col" class="px-6 py-5">Order Status</th>
+                  <th scope="col" class="px-6 py-5 rounded-e-lg">Created Time</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-if="customersOrder.length" v-for="(item, index) in customersOrder"
                   :class="index !== customersOrder.length-1 ? 'border-b': ''"
-                  class="text-lg text-white font-medium bg-gray-900 dark:border-white border-white">
+                  class="text-lg font-medium bg-gray-900 border-gray-800">
                   <th scope="row" class="whitespace-nowrap px-6 py-4 ">{{ item.order_id }}</th>
                   <td class="px-6 py-4">{{ item.customer_name}}</td>
                   <td class="px-6 py-4 capitalize">{{ item.order_status }}</td>
-                  <td class="px-6 py-4">{{ item.created_at }}</td>
+                  <td class="px-6 py-4">{{ formatTo12HourTime(item.created_at) }}</td>
                 </tr>
                 <tr v-else>
                   <td colspan="4" class="py-3 text-center text-white">There are no orders today</td>
@@ -38,6 +39,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue'
+import { useTimeFormatter } from '@/composables/useTimeFormatter';
 import { store } from '@/stores'
 import { io } from 'socket.io-client'
 const socket = io(import.meta.env.VITE_API_URL)
@@ -47,6 +49,9 @@ export default defineComponent({
   name: 'OrderDashboard',
   setup() {
 
+    const searchVal = computed(() => store.app.getSearchVal)
+
+    const { formatTo12HourTime } = useTimeFormatter();
     const customersOrder = computed(() => store.app.getCustomerOrderItems);
     onMounted(() => {
       store.app.getCustomerOrders();
@@ -62,7 +67,8 @@ export default defineComponent({
     })
 
     return {
-      customersOrder
+      customersOrder,
+      formatTo12HourTime
     }
   }
 })

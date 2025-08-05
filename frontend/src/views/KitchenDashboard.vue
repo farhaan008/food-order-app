@@ -49,6 +49,7 @@ import { defineComponent, computed, onMounted } from 'vue'
 import { store } from '@/stores'
 import type { OrderItem, ApiResponse, KitchenStatus, KitchenDashboard } from '@/types/fos';
 import { useKitchenOrdersFilter } from '@/composables/useKitchenOrdersFilter';
+import { useOrderSearch } from '@/composables/useOrderSearch'
 import { showToast } from '@/utils/common/common-functions'
 import { COREAPI } from '@/services';
 import { io } from 'socket.io-client'
@@ -59,14 +60,21 @@ export default defineComponent({
   name: 'KitchenDashboard',
   setup() {
 
+
+    const searchVal = computed(() => store.app.getSearchVal)
     const filterStatus = computed(() => store.app.kitchenFilterVal);
     const kitchenOrders = computed(() => store.app.getKitchenOrderItems);
-    const filteredOrders = computed(() =>{
-        if(filterStatus.value)
+    const filteredOrders = computed(() => {
+      if(searchVal){
+        return useOrderSearch(kitchenOrders.value, searchVal.value)
+      }else if(filterStatus.value){
         return useKitchenOrdersFilter(kitchenOrders.value, filterStatus.value)
-        else return kitchenOrders.value;
+      }else{
+        return kitchenOrders.value;
       }
-    )
+    })
+
+
     onMounted(() => {
       store.app.getKitchenOrders();
       socket.on('order_update', (updatedOrder) => {

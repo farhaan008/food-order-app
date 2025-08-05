@@ -113,7 +113,7 @@ export default defineComponent({
         const target = e?.target as HTMLInputElement;
         const val = target.value;
         store.app.setSearchVal(val);
-      }, 800);
+      }, 500);
     }
 
     return {

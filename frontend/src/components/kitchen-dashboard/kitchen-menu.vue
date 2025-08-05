@@ -23,6 +23,7 @@ export default defineComponent({
         { name: 'Preparing', val: 'preparing'},
         { name: 'Ready', val: 'ready'},
         { name: 'Completed', val: 'served'},
+        { name: 'All', val: 'all'},
       ]
     });
 
@@ -32,7 +33,7 @@ export default defineComponent({
     }
 
     onMounted(()=>{
-      onFilterClick('new');
+      onFilterClick('all');
     })
 
     return {
