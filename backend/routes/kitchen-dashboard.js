@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     JOIN order_items oi ON o.id = oi.order_id
     JOIN menu_items mi ON oi.item_id = mi.id
     LEFT JOIN item_sizes isz ON oi.size_id = isz.id
-    WHERE o.status != 'cancelled'
+    WHERE o.status IN ('confirmed', 'preparing', 'ready', 'served')
     ORDER BY datetime(o.created_at) DESC, o.id, oi.id;
   `;
 
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
     // console.log('Sorted rows:', rows.map(r => r.created_at));
     if (err) {
         console.error('Database error:', err.message);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error:'Internal server error', message: 'Internal server error', status: 'error', statusCode: 500 });
     }
 
     const ordersMap = {};
@@ -50,7 +50,7 @@ router.get('/', (req, res) => {
     const result = Object.values(ordersMap).sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
-    res.json({ data: result, status: 'success', statusCode: 200 });
+    res.json({ data: result, message:'Data fetched successfully', status: 'success', statusCode: 200 });
 
   });
 

@@ -6,9 +6,8 @@ export const showToast = (msg: string, isSuccess: boolean): void => {
     title: isSuccess ? 'Success' : 'Error',
     message: msg,
   })
-  // store.dispatch('app/showToast', {
-  //   type: isSuccess ? 'success' : 'error',
-  //   title: isSuccess ? 'Success' : 'Error',
-  //   description: msg,
-  // })
 }
+export const showToastType = ( title: string, message:string, type: string): void => {
+  store.app.showToast({ title, message, type})
+}
+

@@ -1,11 +1,10 @@
 <template>
     <div class="w-full">
-      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <div v-for="item in filteredOrders" :key="item.order_id" class="flex justify-center items-center p-3 border-b border-gray-200">
+      <div v-if="kitchenOrders && kitchenOrders.length" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="filteredOrders && filteredOrders.length" v-for="item in filteredOrders" :key="item.order_id" class="flex justify-center items-center border border-gray-300 rounded-md p-3">
           <div class="flex justify-between w-full flex-col gap-4 h-full">
             <h3 class="text-lg text-black-700 font-semibold">Order: {{ item.order_id }}</h3>
-            <ul class="list-none border border-gray-200 rounded-md p-3">
+            <ul class="list-none border-t border-b border-gray-300 p-3">
               <li v-for="i in item.items" :key="i.id" class="w-full border-gray-200 dark:border-gray-600">
                 <div class="flex items-center space-x-4">
                   <label :for="`${i.id}`" class="flex justify-between w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -27,7 +26,6 @@
                 :class="checkOrderItemStatus(item.items) !== 'queued'? 'cursor-not-allowed':''">
                 Cancel
               </button>
-
               <button class="bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2 px-6 rounded-md border border-gray-900 focus:outline-none"
                 @click="updateOrderItemAndOrderStatus(`${item.order_id}`, item.items)"
                 :disabled="isActionButtonDisabled(item.items)"
@@ -37,22 +35,30 @@
             </div>
           </div>
         </div>
-
+        <div v-else class="col-span-full">
+          <p class="text-md text-center py-3">No results found for the selected filters.</p>
+        </div>
+      </div>
+      <div v-else>
+        <p class="text-md py-3 text-center">There are no orders today</p>
       </div>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, onMounted, ref, watch } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import { store } from '@/stores'
-import type { KitchenStatus, OrderItem, ApiResponse, KitchenDashboard } from '@/types/fos';
+import type { OrderItem, ApiResponse, KitchenStatus, KitchenDashboard } from '@/types/fos';
 import { useKitchenOrdersFilter } from '@/composables/useKitchenOrdersFilter';
+import { showToast } from '@/utils/common/common-functions'
 import { COREAPI } from '@/services';
+import { io } from 'socket.io-client'
+const socket = io(import.meta.env.VITE_API_URL)
 
 export default defineComponent({
   components: { },
   name: 'KitchenDashboard',
   setup() {
-    // const filterStatus = ref('confirmed');
+
     const filterStatus = computed(() => store.app.kitchenFilterVal);
     const kitchenOrders = computed(() => store.app.getKitchenOrderItems);
     const filteredOrders = computed(() =>{
@@ -63,21 +69,11 @@ export default defineComponent({
     )
     onMounted(() => {
       store.app.getKitchenOrders();
-    })
-
-    const updateOrderItemKitchenStatus = (orderId:any, orderItem:OrderItem) => {
-      console.log(orderId, orderItem);
-      if(orderItem.kitchen_status === 'preparing'){
-        let params = { kitchen_status: 'ready' } as KitchenStatus
-        COREAPI.updateOrderItemKitchenStatus(orderId, orderItem.id, params).then((response:ApiResponse) => {
-          console.log(response);
-          if(response && response.statusCode){
-            console.log(response.message)
-          }
-        }).catch((e) => { console.log(e) } );
+      socket.on('order_update', (updatedOrder) => {
+        console.log(updatedOrder);
         store.app.getKitchenOrders();
-      }
-    }
+      })
+    })
 
     const updateOrderItemAndOrderStatus = (orderId:string, items:OrderItem[]) => {
       let kitchen_status = checkOrderItemStatus(items) as 'queued' | 'preparing' | 'ready' | 'served';
@@ -91,14 +87,16 @@ export default defineComponent({
       if(kitchen_status === 'ready'){
         params.kitchen_status = 'served';
       }
-      console.log(orderId, params);
       COREAPI.updateOrderItemAndOrderStatus(orderId, params).then((response:ApiResponse) => {
-        console.log(response);
-        if(response && response.statusCode){
+        if(response && response.statusCode === 200){
+          showToast(response.message, true )
           console.log(response.message)
         }
         store.app.getKitchenOrders();
-      }).catch((e) => { console.log(e) } );
+      }).catch((e) => {
+        showToast(e.message, false)
+        console.log(e.error)
+      });
 
     }
 
@@ -147,27 +145,39 @@ export default defineComponent({
       return items.every((e)=> e._isReady === true )
     }
 
-    // function getOrderStatus(itemStatuses) {
-    //   if (itemStatuses.every(s => s === 'ready' || s === 'served')) return 'completed';
-    //   if (itemStatuses.every(s => s === 'queued')) return 'queued';
-    //   if (itemStatuses.some(s => s === 'preparing')) return 'preparing';
-    //   return 'in_progress';
-    // }
-
     return {
+      kitchenOrders,
       filteredOrders,
       getBtnStatusText,
       isAllItemChecked,
       checkOrderItemStatus,
       isActionButtonDisabled,
-      updateOrderItemKitchenStatus,
       updateOrderItemAndOrderStatus
     }
   }
 })
 </script>
 
+<!-- const updateOrderItemKitchenStatus = (orderId:any, orderItem:OrderItem) => {
+  console.log(orderId, orderItem);
+  if(orderItem.kitchen_status === 'preparing'){
+    let params = { kitchen_status: 'ready' } as KitchenStatus
+    COREAPI.updateOrderItemKitchenStatus(orderId, orderItem.id, params).then((response:ApiResponse) => {
+      console.log(response);
+      if(response && response.statusCode){
+        console.log(response.message)
+      }
+    }).catch((e) => { console.log(e) } );
+    store.app.getKitchenOrders();
+  }
+} -->
 
+<!-- function getOrderStatus(itemStatuses) {
+  if (itemStatuses.every(s => s === 'ready' || s === 'served')) return 'completed';
+  if (itemStatuses.every(s => s === 'queued')) return 'queued';
+  if (itemStatuses.some(s => s === 'preparing')) return 'preparing';
+  return 'in_progress';
+} -->
 
 <!-- <button
   v-for="item in order.items"

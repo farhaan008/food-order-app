@@ -39,6 +39,7 @@ export default defineComponent({
     watch(() => toasts,() => {
       if (toasts.value.length > 0) {
         setTimeout(() => {
+          console.log('close');
           store.app.clearToast(0);
         }, 5000)
       }

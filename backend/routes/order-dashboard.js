@@ -25,7 +25,7 @@ router.get('/', (_, res) => {
   db.all(query, (err, rows) => {
     if (err) {
         console.error('Database error:', err.message);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error:`${err.message}`, message: 'Internal server error', status: 'error', statusCode: 500 });
     }
     const ordersMap = {};
 
@@ -50,7 +50,7 @@ router.get('/', (_, res) => {
     });
 
     const result = Object.values(ordersMap);
-    res.json({ data: result, status: 'success', statusCode: 200 });
+    res.json({ data: result, message: 'Data fetched successfully', status: 'success', statusCode: 200 });
 
   });
   

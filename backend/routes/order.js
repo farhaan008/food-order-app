@@ -4,12 +4,65 @@ const db = require('../db/database');
 
 
 module.exports = function (io) {
+
+  router.get('/', (_, res) => {
+    const query = `
+      SELECT
+      o.id AS order_id,
+      o.created_at,
+      o.status AS order_status,
+      o.payment_status,
+      mi.name AS item_name,
+      isz.size AS item_size,
+      oi.quantity,
+      oi.kitchen_status,
+      u.name AS customer_name
+      FROM orders o
+      JOIN order_items oi ON o.id = oi.order_id
+      JOIN menu_items mi ON oi.item_id = mi.id
+      LEFT JOIN item_sizes isz ON oi.size_id = isz.id
+      LEFT JOIN users u ON o.user_id = u.id
+      WHERE o.status IN ('confirmed', 'preparing', 'ready', 'served') 
+      ORDER BY o.created_at DESC, o.id, oi.id;
+    `;
+    db.all(query, (err, rows) => {
+      if (err) {
+          console.error('Database error:', err.message);
+          return res.status(500).json({ error:`${err.message}`, message: 'Internal server error', status: 'error', statusCode: 500 });
+      }
+      const ordersMap = {};
+
+      rows.forEach(row => {
+        if (!ordersMap[row.order_id]) {
+          ordersMap[row.order_id] = {
+              order_id: row.order_id,
+              customer_name: row.customer_name,
+              created_at: row.created_at,
+              order_status: row.order_status,
+              payment_status: row.payment_status,
+              items: []
+          };
+        }
+
+        ordersMap[row.order_id].items.push({
+          item_name: row.item_name,
+          item_size: row.item_size,
+          quantity: row.quantity,
+          kitchen_status: row.kitchen_status
+        });
+      });
+
+      const result = Object.values(ordersMap);
+      res.json({ data: result, message: 'Data fetched successfully', status: 'success', statusCode: 200 });
+
+    });
+    
+  });
   
   router.post('/', (req, res) => {
-    console.log(req.body);
     let { name, mobile, items } = req.body;
     if (!Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ error: 'Invalid order data' });
+      return res.status(400).json({ error:'Invalid order data', message: 'Invalid order data', status: 'error', statusCode: 400 });
     }
   
     if (!name) {
@@ -17,10 +70,12 @@ module.exports = function (io) {
     }
   
     db.run(`INSERT INTO users (name, mobile) VALUES (?, ?)`, [name, mobile], function (err) {
-      if (err) return res.status(500).json({ error: err });
+      if (err) return res.status(500).json({ error: err, message: 'Order insert error', status: 'error', statusCode: 500 });
       const userId = this.lastID;
       db.run(`INSERT INTO orders (user_id) VALUES (?)`, [userId], function (err) {
-        if (err) return res.status(500).json({ error: 'Order insert error' });
+        if (err) return res.status(500).json({
+          error:`${err.message}`, message: 'Order insert error', status: 'error', statusCode: 500
+        });
   
         const orderId = this.lastID;
         const stmt = db.prepare(`INSERT INTO order_items (order_id, item_id, quantity, size_id) VALUES (?, ?, ?, ?)`);
@@ -30,41 +85,40 @@ module.exports = function (io) {
         });
   
         stmt.finalize(() => {
-          res.json({ status: 'success', data: { orderId }, statusCode: 200 });
+          res.json({ data: { orderId }, message: 'Order created successfully', status: 'success', statusCode: 200 });
         });
       });
     });
   });
 
-  router.put('/:orderId/item/:itemId/status', (req, res) => {
-    // console.log(req.params);
-    // console.log(req.body);
-    const { orderId, itemId } = req.params;
-    const { kitchen_status } = req.body;
+  router.put('/:orderId', (req, res) => {
+      const { orderId } = req.params;
+      const { status, payment_status } = req.body;
 
-    if (!['queued', 'preparing', 'ready', 'served'].includes(kitchen_status)) {
-      return res.status(400).json({ error: 'Invalid kitchen_status value' });
-    }
-
-    const query = `UPDATE order_items SET kitchen_status = ? WHERE order_id = ? AND id = ?`;
-
-    db.run(query, [kitchen_status, orderId, itemId], function (err) {
-      if (err) {
-        console.error('DB error:', err);
-        return res.status(500).json({ error: 'Failed to update kitchen_status' });
+      if (!status || !payment_status) {
+          return res.status(400).json({ error: 'Missing status or payment_status', message: 'Missing status or payment_status', status: 'error', statusCode: 400 });
       }
 
-      if (this.changes === 0) {
-        return res.status(404).json({ error: 'Order item not found' });
-      }
+      const query = `UPDATE orders SET status = ?, payment_status = ? WHERE id = ?;`;
+      db.run(query, [status, payment_status, orderId], function (err) {
+        if (err) {
+            console.error('Error updating order:', err.message);
+            return res.status(500).json({ status: 'error', message: 'Database update failed' });
+        }
 
-      const data = { order_id: orderId, item_id: itemId, kitchen_status };
-      io.emit('order_update', data);
-      return res.json({ status: 'success', message: 'Kitchen status updated', data, statusCode: 200 });
+        if (this.changes === 0) {
+            return res.status(404).json({ status: 'error', message: 'Order not found' });
+        }
 
-    });
+        if (io && io.emit) { io.emit('order_update', { orderId, status, payment_status }); }
+        return res.json({
+          data: { orderId, status, payment_status },
+          message: `Order ${orderId} updated successfully.`,
+          status: 'success',
+          statusCode: 200
+        });
+      });
   });
-
 
   router.put('/:orderId/item/status', (req, res) => {
     const { orderId } = req.params;
@@ -72,7 +126,7 @@ module.exports = function (io) {
 
     const validStatuses = ['queued', 'preparing', 'ready', 'served'];
     if (!validStatuses.includes(kitchen_status)) {
-      return res.status(400).json({ error: 'Invalid kitchen_status value' });
+      return res.status(400).json({ error:`${err.message}`, message: 'Invalid kitchen_status value', status: 'error', statusCode: 400 });
     }
 
     const updateItemsQuery = `UPDATE order_items SET kitchen_status = ? WHERE order_id = ?`;
@@ -80,11 +134,11 @@ module.exports = function (io) {
     db.run(updateItemsQuery, [kitchen_status, orderId], function (err) {
       if (err) {
         console.error('DB error (order_items):', err.message);
-        return res.status(500).json({ error: 'Failed to update kitchen_status' });
+        return res.status(500).json({ error:`${err.message}`, message: 'Failed to update kitchen_status', status: 'error', statusCode: 500 });
       }
 
       if (this.changes === 0) {
-        return res.status(404).json({ error: 'No order_items found for the given order_id' });
+        return res.status(404).json({ error:`${err.message}`, message: 'No order_items found for the given order_id', status: 'error', statusCode: 404 });
       }
 
       let newOrderStatus;
@@ -107,85 +161,39 @@ module.exports = function (io) {
       db.run(updateOrderQuery, [newOrderStatus, orderId], function (orderErr) {
         if (orderErr) {
           console.error('DB error (orders):', orderErr.message);
-          return res.status(500).json({
-            error: 'Kitchen status updated, but failed to update order status'
+          return res.status(500).json({ 
+            error:`DB error (orders): ${orderErr.message}`, message: 'Kitchen status updated, but failed to update order status',
+            status: 'error', statusCode: 500
           });
         }
 
-        const data = {
-          order_id: orderId,
-          kitchen_status,
-          order_status: newOrderStatus,
-        };
+        const data = { order_id: orderId, kitchen_status, order_status: newOrderStatus };
 
-        if (io && io.emit) {
-          io.emit('order_update', data);
-        }
+        if (io && io.emit) { io.emit('order_update', data); }
 
-        return res.status(200).json({
-          status: 'success',
-          message: 'Kitchen and order status updated successfully',
-          data,
-        });
+        return res.status(200).json({ data: data, message: 'Kitchen and order status updated successfully', status: 'success', statusCode: 200 });
       });
     });
   });
 
-  // router.put('/:orderId/item/status', (req, res) => {
-  //   const { orderId } = req.params;
+  // router.put('/:orderId/item/:itemId/status', (req, res) => {
+  //   const { orderId, itemId } = req.params;
   //   const { kitchen_status } = req.body;
-
-  //   console.log('Params:', req.params);
-  //   console.log('Body:', req.body);
-
-  //   const validStatuses = ['queued', 'preparing', 'ready', 'served'];
-  //   if (!validStatuses.includes(kitchen_status)) {
+  //   if (!['queued', 'preparing', 'ready', 'served'].includes(kitchen_status)) {
   //     return res.status(400).json({ error: 'Invalid kitchen_status value' });
   //   }
-
-  //   const query = `UPDATE order_items SET kitchen_status = ? WHERE order_id = ?`;
-  //   db.run(query, [kitchen_status, orderId], function (err) {
+  //   const query = `UPDATE order_items SET kitchen_status = ? WHERE order_id = ? AND id = ?`;
+  //   db.run(query, [kitchen_status, orderId, itemId], function (err) {
   //     if (err) {
-  //       console.error('DB error:', err.message);
+  //       console.error('DB error:', err);
   //       return res.status(500).json({ error: 'Failed to update kitchen_status' });
   //     }
-
   //     if (this.changes === 0) {
-  //       return res.status(404).json({ error: 'No order_items found for the given order_id' });
+  //       return res.status(404).json({ error: 'Order item not found' });
   //     }
-
-  //     let newOrderStatus = null;
-  //     switch (kitchen_status) {
-  //       case 'preparing':
-  //         newOrderStatus = 'in_progress';
-  //         break;
-  //       case 'ready':
-  //         newOrderStatus = 'ready';
-  //         break;
-  //       case 'served':
-  //         newOrderStatus = 'delivered';
-  //         break;
-  //       default:
-  //         newOrderStatus = 'confirmed';
-  //     }
-  //     const updateOrderQuery = `UPDATE orders SET status = ? WHERE id = ?`;
-  //     db.run(updateOrderQuery, [newOrderStatus, orderId], function (orderErr) {
-  //       if (orderErr) {
-  //         console.error('Failed to update order status:', orderErr.message);
-  //         return res.status(500).json({ error: 'Kitchen status updated, but failed to update order status' });
-  //       }
-  //       const data = { order_id: orderId, kitchen_status, order_status: newOrderStatus };
-  //       if (io && io.emit) {
-  //         io.emit('order_update', data);
-  //       }
-  //       return res.status(200).json({ status: 'success', message: 'Kitchen and order status updated successfully', data });
-  //     });
-
-  //     const data = { order_id: orderId, kitchen_status };
-  //     if (io && io.emit) {
-  //       io.emit('order_update', data);
-  //     }
-  //     return res.status(200).json({ status: 'success', message: 'Kitchen status updated successfully', data });
+  //     const data = { order_id: orderId, item_id: itemId, kitchen_status };
+  //     io.emit('order_update', data);
+  //     return res.json({ status: 'success', message: 'Kitchen status updated', data, statusCode: 200 });
 
   //   });
   // });

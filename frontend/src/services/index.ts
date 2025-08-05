@@ -9,7 +9,7 @@ class Core extends Axios {
     return this.request('post', 'api/order', true, params);
   }
 
-  getCustomerOrders = (): Promise<any> => this.request('get', 'api/order-dashboard', true);
+  getCustomerOrders = (): Promise<any> => this.request('get', 'api/order', true);
 
   getKitchenOrders = (): Promise<any> => this.request('get', 'api/kitchen-dashboard', true);
 

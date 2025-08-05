@@ -51,7 +51,8 @@ export const actions = {
   },
 
   clearCart(this: State): void {
-    this.cart = [],
+    this.cart = [];
+    this.user = {} as User;
     localStorage.removeItem('user')
     localStorage.removeItem('cart')
   },
@@ -88,7 +89,6 @@ export const actions = {
 
   async getCustomerOrders(this: State): Promise<any> {
     await COREAPI.getCustomerOrders().then((response) => {
-      console.log(response);
       if(response.statusCode === 200 && response.data){
         this.customerOrderItems = response.data || []
       }

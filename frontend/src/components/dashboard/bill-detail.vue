@@ -29,7 +29,7 @@ import PaymentQr from '@/components/modal/payment-qr.vue'
 import type { MenuItem, Order } from '@/types/fos'
 import { store } from '@/stores'
 import { COREAPI } from '@/services'
-// import { showToast } from '@/utils/common/common-functions'
+import { showToast } from '@/utils/common/common-functions'
 
 export default defineComponent({
   name: 'BillDetail',
@@ -47,7 +47,6 @@ export default defineComponent({
       show: false,
       qr: '' as string
     })
-    // showToast('Your order has been created!', true )
 
     const getPaymentQr = () => {
       if(cartTotal.value){
@@ -75,10 +74,14 @@ export default defineComponent({
         console.log(params);
         COREAPI.createOrder(params).then((response) => {
           console.log(response);
-          router.push('/');
-          store.app.clearCart();
-        }).catch((error) => {
-          console.error('Error fetching menu:', error)
+          if(response && response.statusCode === 200){
+            showToast(response.message, true)
+            router.push('/');
+            store.app.clearCart();
+          }
+        }).catch((e) => {
+          showToast(e.message, false)
+          console.error('Error fetching menu:', e.error)
         })
       }else{
         console.log('Cart is empty...');
