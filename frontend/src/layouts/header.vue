@@ -28,11 +28,8 @@ export default defineComponent({
   },
   emits: ['toggleNavbar'],
   setup(props, { emit }) {
-    console.log(props.navExpand);
 
-    const toggleNavbar = () => {
-      emit('toggleNavbar')
-    }
+    const toggleNavbar = () => { emit('toggleNavbar') }
 
     const component = computed(() => {
       return props.header;
