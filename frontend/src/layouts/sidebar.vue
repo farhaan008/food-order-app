@@ -1,8 +1,5 @@
 <template>
   <div class="flex flex-col gap-y-6">
-    <div class="flex flex-col items-center cursor-pointer">
-      <h1 class="text-xl font-bold text-gray-800 dark:text-white">RR Cafe</h1>
-    </div>
     <component :is="loadComponent" />
     <!-- <SideMenu></SideMenu> -->
   </div>

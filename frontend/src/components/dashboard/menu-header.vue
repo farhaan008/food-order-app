@@ -1,6 +1,6 @@
 
 <template>
-  <div class="grid grid-cols-[40px_1fr] grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4 p-4">
+  <div class="grid grid-cols-[40px_1fr] md:grid-cols-2 sm:grid-rows-1 gap-4 p-4">
     <div class="md:hidden col-start-1 row-start-1 flex items-center">
       <div @click="toggleNavbar" class="flex lg:hidden md:hidden sm:block">
         <svg class="w-8 h-8 text-gray-800 dark:text-white" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="col-span-2 row-start-2 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center">
+    <div class="col-span-1 row-start-1 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center">
       <input @input="onSearch($event)" type="text" placeholder="Search" class="w-full lg:w-2/3 border border-gray-300 px-4 py-2 rounded-full focus:outline-none" />
     </div>
   </div>

@@ -1,4 +1,7 @@
 <template>
+  <div class="flex flex-col items-center cursor-pointer">
+    <h1 class="text-xl font-bold text-gray-800 dark:text-white">RR Cafe</h1>
+  </div>
   <nav>
     <ul class="list-none flex flex-col gap-y-1">
       <li v-for="(_, category) in menuItems" @click="categoryClick(category)" class="flex flex-col gap-x-2">

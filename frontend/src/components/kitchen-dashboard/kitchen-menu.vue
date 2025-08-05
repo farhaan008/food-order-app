@@ -1,4 +1,8 @@
 <template>
+  <div class="flex flex-col items-center cursor-pointer">
+    <h1 class="text-xl font-bold text-gray-800 dark:text-white">RR Cafe</h1>
+    <p class="text-md">Kitchen Dashboard</p>
+  </div>
   <nav>
     <ul class="list-none flex flex-col gap-y-1">
       <!-- :class="{ active: activeFilter === item.val }" -->
