@@ -59,7 +59,7 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const quantity = computed(() => store.app.getItemQuantity(props.item.id))
+    const quantity = computed(() => store.app.getItemQuantity(props.item.id, props.item.sizeId))
     const menuItems = computed(() => store.app.getMenuItems)
 
     const addToCart = (item: any) => {
@@ -75,6 +75,7 @@ export default defineComponent({
     }
 
     const onSizeChange = (item: MenuItem, sizeId: number) => {
+      console.log(item);
       const price = item.prices?.find((f) => f.sizeId === sizeId)?.price || 0;
       item.price = price;
       store.app.getCartTotal;
