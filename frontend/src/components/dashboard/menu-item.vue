@@ -63,7 +63,6 @@ export default defineComponent({
     const menuItems = computed(() => store.app.getMenuItems)
 
     const addToCart = (item: any) => {
-      console.log(item);
       store.app.addToCart(item)
     }
     const removeFromCart = (item: { id: string | number; sizeId?: number }) => {
