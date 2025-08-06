@@ -4,7 +4,7 @@
   </div>
   <nav>
     <ul class="list-none flex flex-col gap-y-1">
-      <li v-for="(_, category) in menuItems" @click="categoryClick(category)" class="flex flex-col gap-x-2">
+      <li v-for="category in Object.keys(menuItems)" @click="categoryClick(category)" :class="{ active: activeFilter === category }" class="flex flex-col gap-x-2">
         <a class="flex justify-start px-3 py-1 items-center text-gray-800 cursor-pointer">
           <span class="text-md">{{ category }}</span>
         </a>
@@ -13,21 +13,24 @@
   </nav>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { store } from '@/stores'
 
 export default defineComponent({
   name: 'SideMenu',
 
   setup() {
+    const activeFilter = ref('Beverages' as string);
     const menuItems = computed(() => store.app.getMenuItems)
 
-    const categoryClick = (category:string|number|null) => {
+    const categoryClick = (category:string) => {
+      activeFilter.value = category
       store.app.triggerScroll(category);
     }
 
     return {
       menuItems,
+      activeFilter,
       categoryClick
     }
   },
@@ -36,11 +39,3 @@ export default defineComponent({
 <style scoped>
   .active { border-left: 3px solid #000; }
 </style>
-
-<!-- <ul class="list-none flex flex-col gap-y-1 overflow-hidden transition-all duration-300 ease-in-out max-h-0">
-  <li class="flex flex-col gap-x-2">
-    <RouterLink to="/" :class="navExpand ? 'justify-start' : 'justify-center'" class="flex items-center py-1 cursor-pointer rounded-md text-gray-500 hover:text-gray-700">
-      <span v-if="navExpand" class="text-xs">List 1</span>
-    </RouterLink>
-  </li>
-</ul> -->

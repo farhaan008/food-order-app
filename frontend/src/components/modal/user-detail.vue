@@ -81,7 +81,6 @@ export default defineComponent({
           field.errMessage = 'Please enter a valid 10-digit mobile number';
         }else { user.value.mobile = field.value }
       }
-      // validateForm();
     }
 
     const inputFields = reactive([
@@ -93,7 +92,6 @@ export default defineComponent({
       return inputFields.some(field => field.isError)
     })
 
-    console.log(isFormInvalid.value);
     const close = () => {
       emit('close', false)
     }
@@ -103,7 +101,6 @@ export default defineComponent({
         if(store.app?.setUser){
           store.app.setUser(user.value);
         }
-        console.log(user.value);
         close()
       }
     }

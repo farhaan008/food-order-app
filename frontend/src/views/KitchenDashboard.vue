@@ -78,7 +78,6 @@ export default defineComponent({
     onMounted(() => {
       store.app.getKitchenOrders();
       socket.on('order_update', (updatedOrder) => {
-        console.log(updatedOrder);
         store.app.getKitchenOrders();
       })
     })
@@ -98,7 +97,6 @@ export default defineComponent({
       COREAPI.updateOrderItemAndOrderStatus(orderId, params).then((response:ApiResponse) => {
         if(response && response.statusCode === 200){
           showToast(response.message, true )
-          console.log(response.message)
         }
         store.app.getKitchenOrders();
       }).catch((e) => {

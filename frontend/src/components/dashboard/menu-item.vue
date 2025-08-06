@@ -74,7 +74,6 @@ export default defineComponent({
     }
 
     const onSizeChange = (item: MenuItem, sizeId: number) => {
-      console.log(item);
       const price = item.prices?.find((f) => f.sizeId === sizeId)?.price || 0;
       item.price = price;
       store.app.getCartTotal;

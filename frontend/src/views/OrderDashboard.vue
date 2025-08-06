@@ -8,7 +8,6 @@
           <p class="text-xs">A list of customers order</p>
         </div>
       </div>
-      <!-- border border-gray-600 rounded-lg -->
       <div class="relative overflow-x-auto">
           <table class="w-full text-left text-gray-200">
               <thead class="text-md uppercase bg-gray-800">
@@ -49,20 +48,12 @@ export default defineComponent({
   name: 'OrderDashboard',
   setup() {
 
-    const searchVal = computed(() => store.app.getSearchVal)
-
     const { formatTo12HourTime } = useTimeFormatter();
     const customersOrder = computed(() => store.app.getCustomerOrderItems);
     onMounted(() => {
       store.app.getCustomerOrders();
-      // showToast('Your order has been created!', true )
-      // if(Object.keys(menuItems.value).length === 0) {}
       socket.on('order_update', (updatedOrder) => {
-        console.log(updatedOrder);
         store.app.getCustomerOrders();
-        // const index = orders.value.findIndex(o => o.orderId === updatedOrder.orderId)
-        // if (index !== -1) orders.value[index] = updatedOrder
-        // else orders.value.push(updatedOrder)
       })
     })
 

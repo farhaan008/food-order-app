@@ -5,7 +5,6 @@
   </div>
   <nav>
     <ul class="list-none flex flex-col gap-y-1">
-      <!-- :class="{ active: activeFilter === item.val }" -->
       <li v-for="item in category" @click="onFilterClick(item.val)" :class="{ active: activeFilter === item.val }" class="flex flex-col gap-x-2">
         <a class="flex justify-start px-3 py-1 items-center text-gray-800 cursor-pointer">
           <span class="text-md">{{ item.name }}</span>
