@@ -1,7 +1,7 @@
 import router from '@/router'
 import _axios, { type AxiosInstance, AxiosHeaders, type InternalAxiosRequestConfig, type AxiosResponse, type Method, AxiosError } from 'axios'
 
-import { type Data } from './http.types'
+import { type PayloadData } from './http.types'
 
 const baseUrl: string | undefined = import.meta.env.VITE_API_URL
 
@@ -88,34 +88,78 @@ export class Axios {
     }
   }
 
-  async request(type: Method, url: string, isAuth: boolean, data?: Data): Promise<AxiosResponse> {
-    this.setAuthHeader = isAuth
+  // request(type: string, url: string, isAuth: boolean, data?: Data): Promise<AxiosResponse> request<T>(method: string, url: string, auth: boolean, data: T): Promise<any>
+  // async request(type: string, url: string, isAuth: boolean, data?: Data): Promise<AxiosResponse> {
+  //   this.setAuthHeader = isAuth
+  //   try {
+  //     let response: AxiosResponse
+  //     switch (type) {
+  //       case 'get':
+  //         response = await this.instance.get(url, data)
+  //         break
+  //       case 'post':
+  //         response = await this.instance.post(url, data)
+  //         break
+  //       case 'put':
+  //         response = await this.instance.put(url, data)
+  //         break
+  //       case 'patch':
+  //         response = await this.instance.get(url, data)
+  //         break
+  //       case 'delete':
+  //         response = await this.instance.get(url, data)
+  //         break
+  //       default:
+  //         response = await this.instance.get(url, data)
+  //         break
+  //     }
+  //     return response && response.data ? response.data : response
+  //   } catch (error) {
+  //     this.handleErrors(error as AxiosError)
+  //     return Promise.reject(error)
+  //   }
+  // }
+
+  /**
+   * @access protected
+   * @param { Method } type
+   * @param { string } url
+   * @param { boolean } isAuth
+   * @param { object } data
+   * @returns { Promise<R> }
+   * @memberof Axios
+  */
+
+  protected async request<T>( type: Method, url: string, isAuth: boolean, data?: PayloadData): Promise<T> {
+    this.setAuthHeader = isAuth;
     try {
-      let response: AxiosResponse
+      let response: AxiosResponse<T>;
       switch (type) {
         case 'get':
-          response = await this.instance.get(url, { params: data })
+          response = await this.instance.get<T>(url, data)
           break
         case 'post':
-          response = await this.instance.post(url, { params: data })
+          response = await this.instance.post<T>(url, data)
           break
         case 'put':
-          response = await this.instance.put(url, { params: data })
+          response = await this.instance.put<T>(url, data)
           break
         case 'patch':
-          response = await this.instance.get(url, { params: data })
+          response = await this.instance.get<T>(url, data)
           break
         case 'delete':
-          response = await this.instance.get(url, { params: data })
+          response = await this.instance.get<T>(url, data)
           break
         default:
-          response = await this.instance.get(url, { params: data })
-          break
+          throw new Error(`Unsupported method: ${type}`);
       }
-      return response && response.data ? response.data : response
+      return response && response.data ? response.data : response.data
+
     } catch (error) {
       this.handleErrors(error as AxiosError)
       return Promise.reject(error)
     }
   }
+
 }
+
