@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div v-if="totalItems" :id="totalPages" class="bg-white pt-2 my-2 flex items-center justify-between border rounded-md border-gray-200">
     <div class="flex-1 flex items-center justify-between w-full">
       <div class="grid grid-cols-1">
@@ -34,7 +34,7 @@
           @click="onClickPrev"
           class="relative inline-flex items-center p-2 rounded-l-md border border-gray-300 bg-white text-sm hover:bg-gray-50 select-none cursor-pointer"
         >
-          <!-- <img src="@/assets/icon/arrow-right.svg" class="transform rotate-180 h-5 w-5" /> -->
+          <img src="@/assets/icon/arrow-right.svg" class="transform rotate-180 h-5 w-5" />
         </a>
         <div
           v-for="item in pages"
@@ -47,14 +47,14 @@
           {{ item }}
         </div>
         <div @click="onClickNext" class="relative inline-flex items-center p-2 rounded-r-md border border-gray-300 bg-white text-sm hover:bg-gray-50 select-none cursor-pointer">
-          <!-- <img class="h-5 w-5" src="@/assets/icon/arrow-right.svg" alt=">" /> -->
+          <img class="h-5 w-5" src="@/assets/icon/arrow-right.svg" alt=">" />
         </div>
       </nav>
     </div>
   </div>
-</template>
+</template> -->
 
-<script lang="ts">
+<!-- <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
@@ -135,9 +135,9 @@ export default defineComponent({
     }
   },
 })
-</script>
-<style scoped>
+</script> -->
+<!-- <style scoped>
 .end {
   text-align: end;
 }
-</style>
+</style> -->
