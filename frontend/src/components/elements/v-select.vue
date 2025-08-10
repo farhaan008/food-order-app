@@ -1,12 +1,12 @@
-<template>
+<!-- <template>
   <div class="relative v-select" :id="id" :name="name">
     <template v-if="defaultTrigger">
       <p v-if="label" class="flex ml-2 px-2 py-0.5 absolute rounded text-xs -mt-3 bg-gradient-to-t from-white">
         {{ label }}
         <span v-if="required" class="text-red-500">*</span>
-        <!-- <tooltip v-if="showInfo" :title="label" :desc="infoText">
+        <tooltip v-if="showInfo" :title="label" :desc="infoText">
           <img src="@/assets/icons/info.svg" class="w-4 h-4 cursor-pointer" alt="Info Icon" />
-        </tooltip> -->
+        </tooltip>
       </p>
       <div
         class="flex items-center appearance-none border border-gray-200 w-full p-2 rounded-lg focus:outline-none"
@@ -21,12 +21,12 @@
           <div v-for="(item, idx) in selectValue" :key="idx" class="flex text-white bg-aqua rounded-md p-1.5 w-max m-1">
             <span class="text-xs whitespace-nowrap">{{ item[optsKey] }}</span>
             <button type="button" class="ml-1 px-1.5 text-xs text-white shadow-lg" @click.stop="removeItem(idx)">
-              <!-- <img src="@/assets/icons/close.svg" class="w-3 h-3" alt="Remove Tag" /> -->
+              <img src="@/assets/icons/close.svg" class="w-3 h-3" alt="Remove Tag" />
             </button>
           </div>
         </div>
-        <!-- <img src="@/assets/icons/arrow-down.svg" class="w-4 h-4 ml-
-         zauto" alt="Dropdown Icon" /> -->
+        <img src="@/assets/icons/arrow-down.svg" class="w-4 h-4 ml-
+         zauto" alt="Dropdown Icon" />
       </div>
     </template>
     <template v-else>
@@ -37,11 +37,11 @@
 
     <div v-if="showList && !disabled" :class="width && width !== '' ? width : 'w-full'" class="absolute bg-white shadow-lg rounded-b-md z-10">
       <div v-if="searchable" class="flex my-1 mx-2 p-2 items-center border-2 bg-gray-100 border-aqua rounded-md">
-        <!-- <img src="@/assets/icons/search.svg" class="w-4 h-4 mr-2 select-none bg-gray-100" alt="Search Icon" /> -->
+        <img src="@/assets/icons/search.svg" class="w-4 h-4 mr-2 select-none bg-gray-100" alt="Search Icon" />
         <input name="ops-search" type="text" autocomplete="off" autofocus v-model="searchQuery" @input="onSearch()" class="w-full bg-gray-100 bg-transparent appearance-none outline-none" />
-        <!-- <button @click="clearSearch" class="ml-2 text-gray-500 hover:text-gray-700">
+        <button @click="clearSearch" class="ml-2 text-gray-500 hover:text-gray-700">
           <i class="fas fa-times"></i>
-        </button> -->
+        </button>
       </div>
       <div v-if="groupable == false" :id="`ddl-${id}`" @scroll="scroll($event, `ddl-${id}`, `${id}`)" class="max-h-52 overflow-y-scroll">
         <div
@@ -104,19 +104,19 @@
       </div>
       <div v-if="showClearButton" class="flex justify-end items-center px-2">
         <div class="flex items-center cursor-pointer hover:bg-gray-100 p-2">
-          <!-- <img src="@/assets/icons/close.svg" class="w-4 h-4" alt="Clear Selection" @click="onClear" /> -->
+          <img src="@/assets/icons/close.svg" class="w-4 h-4" alt="Clear Selection" @click="onClear" />
           <span>Clear</span>
         </div>
       </div>
     </div>
   </div>
-</template>
+</template> -->
 
-<script lang="ts">
+<!-- <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
-// import { useDebounceFn } from '@vueuse/core' ;
 import type { IVSelect } from '@/types/elements/select'
 // import Tooltip from '@/components/elements/tooltip.vue';
+// import { useDebounceFn } from '@vueuse/core' ;
 
 export default defineComponent({
   name: 'VSelect',
@@ -440,4 +440,4 @@ export default defineComponent({
 .v-select .select-value {
   width: calc(100% - 15px);
 }
-</style>
+</style> -->
