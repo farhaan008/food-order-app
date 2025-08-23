@@ -15,7 +15,7 @@ import { filterMenuBySearch } from '@/composables/useMenuFilter.ts'
 import { store } from '@/stores'
 // import { showToast } from '@/utils/common/common-functions'
 export default defineComponent({
-  name: 'Menu',
+  name: 'FoodMenu',
   components: {
     MenuItem,
   },
