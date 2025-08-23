@@ -12,7 +12,7 @@
         <p class="text-sm text-description mb-2">{{ item.description }}</p>
         <div class="flex flex-inline space-x-4 justify-start mb-3">
           <div v-for="size in item.sizes" :key="size.sizeId" class="flex flex-inline items-center space-x-1">
-            <input type="radio" :name="'size-' + item.id" :id="'size-' + size.sizeId" :value="size.sizeId" v-model="item.sizeId" @change="onSizeChange(item, size.sizeId)" class="h-4 w-4 text-blue-600 border-gray-300"/>
+            <input type="radio" :name="'size-' + item.id" :id="'size-' + size.sizeId" :value="size.sizeId" @change="onSizeChange(item, size.sizeId)" class="h-4 w-4 text-blue-600 border-gray-300"/>
             <label :for="'size-' + size.sizeId" class="text-sm text-gray-700">{{ size.size }}</label>
           </div>
         </div>
@@ -58,11 +58,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const quantity = computed(() => store.app.getItemQuantity(props.item.id, props.item.sizeId))
     const menuItems = computed(() => store.app.getMenuItems)
 
-    const addToCart = (item: any) => {
+    const addToCart = (item: MenuItem) => {
       store.app.addToCart(item)
     }
     const removeFromCart = (item: { id: string | number; sizeId?: number }) => {
@@ -76,7 +76,7 @@ export default defineComponent({
     const onSizeChange = (item: MenuItem, sizeId: number) => {
       const price = item.prices?.find((f) => f.sizeId === sizeId)?.price || 0;
       item.price = price;
-      store.app.getCartTotal;
+      store.app.getCartTotal();
     }
 
     return {
