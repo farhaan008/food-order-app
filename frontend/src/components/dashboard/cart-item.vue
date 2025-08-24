@@ -1,5 +1,7 @@
 <template>
-  <div v-for="(item, index) in cartItems" :key="index" :class="index === cartItems.length - 1 ? '' : 'border-b border-gray-200'" class="flex gap-4 justify-between items-center py-4">
+  <div v-for="(item, index) in cartItems" :key="index"
+    :class="[ index === 0 ? 'pb-4' : 'py-4', index !== cartItems.length - 1 ? 'border-b border-gray-200' : '' ]"
+    class="flex gap-4 justify-between items-center">
     <div class="text-sm font-normal">
       <p>{{ item.name }} <span v-if="getSize(item, item.sizeId)">- {{ getSize(item, item.sizeId) }}</span></p>
       <p class="text-gray-600 font-normal">₹ {{ item.price }}</p>

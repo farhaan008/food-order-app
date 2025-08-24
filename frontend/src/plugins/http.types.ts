@@ -8,6 +8,7 @@ export interface PayloadData {
 }
 
 
+
 export interface Data {
   [key: string]: number | string
 }
