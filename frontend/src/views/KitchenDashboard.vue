@@ -1,40 +1,42 @@
 <template>
     <div class="w-full">
       <div v-if="kitchenOrders && kitchenOrders.length" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div v-if="filteredOrders && filteredOrders.length" v-for="item in filteredOrders" :key="item.order_id" class="flex justify-center items-center border border-gray-300 rounded-md p-3">
-          <div class="flex justify-between w-full flex-col gap-4 h-full">
-            <h3 class="text-lg text-black-700 font-semibold">Order: {{ item.order_id }}</h3>
-            <ul class="list-none border-t border-b border-gray-300 p-3">
-              <li v-for="i in item.items" :key="i.id" class="w-full border-gray-200 dark:border-gray-600">
-                <div class="flex items-center space-x-4">
-                  <label :for="`${i.id}`" class="flex justify-between w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                    <span>{{ i.item_name}}</span>
-                    <div class="flex flex-inline space-x-3">
-                      <span v-if="i.item_size">{{ i.item_size }}</span>
-                      <span>{{ i.quantity }}</span>
-                    </div>
-                  </label>
-                  <input :id="`${i.id}`" v-model="i._isReady"
-                  :disabled="i.kitchen_status === 'queued' || i.kitchen_status === 'ready' || i.kitchen_status === 'served'"
-                  type="checkbox" value="" class="w-6 h-6 ms-3">
-                </div>
-              </li>
-            </ul>
-            <div class="flex justify-between space-x-6">
-              <button class="bg-red-300 hover:bg-red-400 text-black text-sm font-medium py-2 px-4 rounded-md border border-gray-600 focus:outline-none"
-                :disabled="checkOrderItemStatus(item.items) !== 'queued'"
-                :class="checkOrderItemStatus(item.items) !== 'queued'? 'cursor-not-allowed':''">
-                Cancel
-              </button>
-              <button class="bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2 px-6 rounded-md border border-gray-900 focus:outline-none"
-                @click="updateOrderItemAndOrderStatus(`${item.order_id}`, item.items)"
-                :disabled="isActionButtonDisabled(item.items)"
-                :class="{'opacity-80 cursor-not-allowed': isActionButtonDisabled(item.items) }">
-                {{ getBtnStatusText(item.items) }}
-              </button>
+        <template v-if="filteredOrders && filteredOrders.length">
+          <div v-for="item in filteredOrders" :key="item.order_id" class="flex justify-center items-center border border-gray-300 rounded-md p-3">
+            <div class="flex justify-between w-full flex-col gap-4 h-full">
+              <h3 class="text-lg text-black-700 font-semibold">Order: {{ item.order_id }}</h3>
+              <ul class="list-none border-t border-b border-gray-300 p-3">
+                <li v-for="i in item.items" :key="i.id" class="w-full border-gray-200 dark:border-gray-600">
+                  <div class="flex items-center space-x-4">
+                    <label :for="`${i.id}`" class="flex justify-between w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                      <span>{{ i.item_name}}</span>
+                      <div class="flex flex-inline space-x-3">
+                        <span v-if="i.item_size">{{ i.item_size }}</span>
+                        <span>{{ i.quantity }}</span>
+                      </div>
+                    </label>
+                    <input :id="`${i.id}`" v-model="i._isReady"
+                    :disabled="i.kitchen_status === 'queued' || i.kitchen_status === 'ready' || i.kitchen_status === 'served'"
+                    type="checkbox" value="" class="w-6 h-6 ms-3">
+                  </div>
+                </li>
+              </ul>
+              <div class="flex justify-between space-x-6">
+                <button class="bg-red-300 hover:bg-red-400 text-black text-sm font-medium py-2 px-4 rounded-md border border-gray-600 focus:outline-none"
+                  :disabled="checkOrderItemStatus(item.items) !== 'queued'"
+                  :class="checkOrderItemStatus(item.items) !== 'queued'? 'cursor-not-allowed':''">
+                  Cancel
+                </button>
+                <button class="bg-green-700 hover:bg-green-800 text-white text-sm font-medium py-2 px-6 rounded-md border border-gray-900 focus:outline-none"
+                  @click="updateOrderItemAndOrderStatus(`${item.order_id}`, item.items)"
+                  :disabled="isActionButtonDisabled(item.items)"
+                  :class="{'opacity-80 cursor-not-allowed': isActionButtonDisabled(item.items) }">
+                  {{ getBtnStatusText(item.items) }}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
         <div v-else class="col-span-full">
           <p class="text-md text-center py-3">No results found for the selected filters.</p>
         </div>
@@ -47,7 +49,7 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue'
 import { store } from '@/stores'
-import type { OrderItem, ApiResponse, KitchenStatus, KitchenDashboard } from '@/types/fos';
+import type { OrderItem, ApiResponse } from '@/types/fos';
 import { useKitchenOrdersFilter } from '@/composables/useKitchenOrdersFilter';
 import { useOrderSearch } from '@/composables/useOrderSearch'
 import { showToast } from '@/utils/common/common-functions'
@@ -78,13 +80,14 @@ export default defineComponent({
     onMounted(() => {
       store.app.getKitchenOrders();
       socket.on('order_update', (updatedOrder) => {
+        console.log('Received order update via WebSocket:', updatedOrder);
         store.app.getKitchenOrders();
       })
     })
 
     const updateOrderItemAndOrderStatus = (orderId:string, items:OrderItem[]) => {
-      let kitchen_status = checkOrderItemStatus(items) as 'queued' | 'preparing' | 'ready' | 'served';
-      let params = { kitchen_status: kitchen_status }
+      const kitchen_status = checkOrderItemStatus(items) as 'queued' | 'preparing' | 'ready' | 'served';
+      const params = { kitchen_status: kitchen_status }
       if(kitchen_status === 'queued'){
         params.kitchen_status = 'preparing';
       }

@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-900 w-full h-screen px-3">
-    <div class="flex flex-col gap-y-3 py-3 px-4">
+    <div class="flex flex-col gap-y-3 py-3 px-4 h-full">
       <div class="flex justify-between items-center gap-y-2 py-3 px-4 rounded-lg">
         <div class="text-2xl font-bold text-gray-100">RR Cafe</div>
         <div class="flex flex-col text-gray-100">
@@ -19,14 +19,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-if="customersOrder.length" v-for="(item, index) in customersOrder"
-                  :class="index !== customersOrder.length-1 ? 'border-b': ''"
-                  class="text-lg font-medium bg-gray-900 border-gray-800">
-                  <th scope="row" class="whitespace-nowrap px-6 py-4 ">{{ item.order_id }}</th>
-                  <td class="px-6 py-4">{{ item.customer_name}}</td>
-                  <td class="px-6 py-4 capitalize">{{ item.order_status }}</td>
-                  <td class="px-6 py-4">{{ formatTo12HourTime(item.created_at) }}</td>
-                </tr>
+                <template v-if="customersOrder && customersOrder.length">
+                  <tr v-for="(item, index) in customersOrder"
+                    :key="item.order_id"
+                    :class="index !== customersOrder.length-1 ? 'border-b': ''"
+                    class="text-lg font-medium bg-gray-900 border-gray-800">
+                    <th scope="row" class="whitespace-nowrap px-6 py-4 ">{{ item.order_id }}</th>
+                    <td class="px-6 py-4">{{ item.customer_name}}</td>
+                    <td class="px-6 py-4 capitalize">{{ item.order_status }}</td>
+                    <td class="px-6 py-4">{{ formatTo12HourTime(item.created_at) }}</td>
+                  </tr>
+                </template>
                 <tr v-else>
                   <td colspan="4" class="py-3 text-center text-white">There are no orders today</td>
                 </tr>
@@ -53,6 +56,7 @@ export default defineComponent({
     onMounted(() => {
       store.app.getCustomerOrders();
       socket.on('order_update', (updatedOrder) => {
+        console.log('Order update received:', updatedOrder);
         store.app.getCustomerOrders();
       })
     })

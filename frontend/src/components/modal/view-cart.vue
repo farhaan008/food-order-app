@@ -1,10 +1,10 @@
 <template>
-  <Modal :isVisible="show" @cancel="close()">
+  <Modal :isVisible="show">
     <template #title>
       <h3 class="text-lg font-semibold capitilize">My Cart</h3>
     </template>
     <template #body>
-      <cart-item></cart-item>
+      <cart-item @close="close()"></cart-item>
     </template>
     <template #footer>
       <div class="flex gap-4">
@@ -36,7 +36,7 @@ export default defineComponent({
   setup(_, { emit }) {
 
     const close = () => {
-      emit('close', false)
+      emit('close')
     }
 
     return {
