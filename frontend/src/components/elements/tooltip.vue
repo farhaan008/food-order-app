@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <tippy :placement="placement">
     <slot></slot>
     <template #content>
@@ -16,9 +16,9 @@
       </div>
     </template>
   </tippy>
-</template>
+</template> -->
 
-<script lang="ts">
+<!-- <script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -85,4 +85,4 @@ export default defineComponent({
     return {}
   },
 })
-</script>
+</script> -->

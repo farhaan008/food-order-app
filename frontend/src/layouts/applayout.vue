@@ -5,12 +5,13 @@
     </div>
     <div v-if="navExpand" @click="onClickOutside" class="fixed inset-0 bg-black opacity-5 h-full w-full z-20 lg:hidden md:hidden sm:block"></div>
     <aside :class="navExpand ? 'open-sidebar' : ''" class="sidebar p-3 border-r border-gray-200 z-50 bg-white">
-      <SideBar :navExpand="navExpand" @toggleNavbar="navExpand = !navExpand"></SideBar>
+      <SideBar :type="`${sidebarType}`"></SideBar>
     </aside>
     <main class="main grid grid-rows-[auto, 1fr] h-screen">
-      <HeaderBar @toggleNavbar="navExpand = !navExpand"></HeaderBar>
+      <HeaderBar :header="`${header}`" @toggleNavbar="navExpand = !navExpand"></HeaderBar>
       <div class="flex flex-col p-3 overflow-y-auto">
         <Dashboard />
+        <NotifyVue></NotifyVue>
       </div>
     </main>
   </div>
@@ -18,16 +19,23 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onBeforeMount, onBeforeUnmount } from 'vue'
+import { useRoute } from 'vue-router';
 import { store } from '@/stores'
 import SideBar from './sidebar.vue'
 import HeaderBar from './header.vue'
 import Dashboard from './dashboard.vue'
+import NotifyVue from  '@/components/elements/notify.vue'
 
 export default defineComponent({
   name: 'LayoutContainer',
-  components: { SideBar, HeaderBar, Dashboard },
+  components: { SideBar, HeaderBar, Dashboard, NotifyVue },
 
   setup() {
+    const route = useRoute();
+    const sidebarType = computed(() =>
+      route.meta?.sidebar || 'SideMenu'
+    );
+    const header = computed(() => route.meta?.header || 'MenuHeader');
     const width = 768
     const { body } = document
 
@@ -45,7 +53,6 @@ export default defineComponent({
     }
     const resizeObserver = (): void => {
       if (!document.hidden) {
-        console.log(isMobile())
         // store.dispatch('app/setIsMobile', isMob);
         if (isMobile()) {
           navExpand.value = false
@@ -70,10 +77,13 @@ export default defineComponent({
       // if (sidebar.value && !sidebar.value.contains(event.target as Node)) {}
     }
 
+
     return {
       navExpand,
       sidebar,
+      header,
       showLoader,
+      sidebarType,
       onClickOutside,
     }
   },

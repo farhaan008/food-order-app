@@ -1,15 +1,10 @@
 <template>
-  <!--
-  <router-view v-slot="{ Component }">
-    <transition name="fade" mode="out-in">
+  <router-view v-if="$route.meta.keepAlive" v-slot="{ Component }">
+    <keep-alive>
       <component :is="Component" />
-    </transition>
+    </keep-alive>
   </router-view>
-  -->
 
-  <transition name="fade" mode="out-in">
-    <router-view></router-view>
-  </transition>
 </template>
 
 <script setup lang="ts">

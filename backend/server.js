@@ -1,26 +1,38 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const http = require('http');
 const app = express();
-
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Route Imports
-const orderRoutes = require('./routes/order');
-const paymentRoutes = require('./routes/payment');
+const server = http.createServer(app);
+const socketIO = require('socket.io');
+const socket = require('./socket');
+const io = socketIO(server, { cors: { origin: '*' } });
+socket.init(io);
+
 const menuRoutes = require('./routes/menu');
-const categoriesRoutes = require('./routes/menu');
+const orderRoutes = require('./routes/order');
+const orderKitchenDashboardRoutes = require('./routes/kitchen-dashboard')
 
-// Route Usage
-app.use('/order', orderRoutes);
-app.use('/payment-link', paymentRoutes);
-app.use('/menu', menuRoutes);
-app.use('/categories', categoriesRoutes);
 
-// Start Server
+app.use('/api/menu', menuRoutes);
+app.use('/api/order', orderRoutes(io));
+app.use('/api/kitchen-dashboard', orderKitchenDashboardRoutes);
+
+const paymentRoutes = require('./routes/payment');
+const generateQr = require('./routes/generate-qr');
+
+app.use('/api/payment-link', paymentRoutes);
+app.use('/api/generate-qr', generateQr);
+app.get("/", (req, res) => {
+  res.send("Deployed version v2 🚀");
+});
+
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT,'0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
+

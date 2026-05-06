@@ -1,28 +1,34 @@
 <template>
   <div class="flex flex-col gap-y-6">
-    <transition name="slide">
-      <div class="flex flex-col items-center cursor-pointer">
-        <img src="@/assets/BS_logo.png" alt="Logo" width="80" />
-        <h1 class="text-xl font-bold text-gray-800 dark:text-white">Burger Singh</h1>
-        <!-- <img class="h-4 w-4" :class="{ 'transform rotate-180 relative': navExpand }" src="@/assets/icons/arrow-down.svg" alt="Toggle Navbar" /> -->
-      </div>
-    </transition>
-    <SideMenu></SideMenu>
+    <component :is="loadComponent" />
+    <!-- <SideMenu></SideMenu> -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import SideMenu from '@/layouts/sidemenu.vue'
+import { defineComponent, computed } from 'vue'
+import SideMenu from '@/components/dashboard/sidemenu.vue'
+import KitchenMenu from '@/components/kitchen-dashboard/kitchen-menu.vue';
+
 export default defineComponent({
   name: 'SideBar',
   components: {
     SideMenu,
+    KitchenMenu
   },
-
-  emits: ['toggleNavbar'],
+  props: {
+    type: {
+      type: String,
+      default: 'SideMenu',
+    }
+  },
   setup(_, { emit }) {
-    return {}
+    const loadComponent = computed(() => {
+      return _.type;
+    });
+    return {
+      loadComponent
+    }
   },
 })
 </script>
